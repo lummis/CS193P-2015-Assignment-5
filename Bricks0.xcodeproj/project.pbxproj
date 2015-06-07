@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		7D79C1E41B213ACA0022C7B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */; };
-		7D79C1E61B213ACA0022C7B4 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C1E51B213ACA0022C7B4 /* ViewController.swift */; };
 		7D79C1E91B213ACA0022C7B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D79C1E71B213ACA0022C7B4 /* Main.storyboard */; };
 		7D79C1EB1B213ACA0022C7B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D79C1EA1B213ACA0022C7B4 /* Images.xcassets */; };
 		7D79C1EE1B213ACA0022C7B4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D79C1EC1B213ACA0022C7B4 /* LaunchScreen.xib */; };
 		7D79C1FA1B213ACA0022C7B4 /* Bricks0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C1F91B213ACA0022C7B4 /* Bricks0Tests.swift */; };
+		7D79C2041B213B400022C7B4 /* BricksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C2031B213B400022C7B4 /* BricksVC.swift */; };
+		7D79C20C1B2148BA0022C7B4 /* BricksBehavior.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C20B1B2148BA0022C7B4 /* BricksBehavior.swift */; };
+		7DA9BD9C1B2376CF00ECC595 /* BezierPathsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,13 +31,15 @@
 		7D79C1DE1B213ACA0022C7B4 /* Bricks0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bricks0.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D79C1E21B213ACA0022C7B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7D79C1E51B213ACA0022C7B4 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7D79C1E81B213ACA0022C7B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7D79C1EA1B213ACA0022C7B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7D79C1ED1B213ACA0022C7B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		7D79C1F31B213ACA0022C7B4 /* Bricks0Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Bricks0Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D79C1F81B213ACA0022C7B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D79C1F91B213ACA0022C7B4 /* Bricks0Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bricks0Tests.swift; sourceTree = "<group>"; };
+		7D79C2031B213B400022C7B4 /* BricksVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BricksVC.swift; sourceTree = "<group>"; };
+		7D79C20B1B2148BA0022C7B4 /* BricksBehavior.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BricksBehavior.swift; sourceTree = "<group>"; };
+		7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BezierPathsView.swift; path = ../BezierPathsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,11 +81,10 @@
 		7D79C1E01B213ACA0022C7B4 /* Bricks0 */ = {
 			isa = PBXGroup;
 			children = (
-				7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */,
-				7D79C1E51B213ACA0022C7B4 /* ViewController.swift */,
 				7D79C1E71B213ACA0022C7B4 /* Main.storyboard */,
-				7D79C1EA1B213ACA0022C7B4 /* Images.xcassets */,
-				7D79C1EC1B213ACA0022C7B4 /* LaunchScreen.xib */,
+				7D79C2031B213B400022C7B4 /* BricksVC.swift */,
+				7D79C20B1B2148BA0022C7B4 /* BricksBehavior.swift */,
+				7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */,
 				7D79C1E11B213ACA0022C7B4 /* Supporting Files */,
 			);
 			path = Bricks0;
@@ -90,6 +93,9 @@
 		7D79C1E11B213ACA0022C7B4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */,
+				7D79C1EC1B213ACA0022C7B4 /* LaunchScreen.xib */,
+				7D79C1EA1B213ACA0022C7B4 /* Images.xcassets */,
 				7D79C1E21B213ACA0022C7B4 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -212,7 +218,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D79C1E61B213ACA0022C7B4 /* ViewController.swift in Sources */,
+				7DA9BD9C1B2376CF00ECC595 /* BezierPathsView.swift in Sources */,
+				7D79C20C1B2148BA0022C7B4 /* BricksBehavior.swift in Sources */,
+				7D79C2041B213B400022C7B4 /* BricksVC.swift in Sources */,
 				7D79C1E41B213ACA0022C7B4 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,6 +419,7 @@
 				7D79C1FF1B213ACA0022C7B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7D79C2001B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks0Tests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +428,7 @@
 				7D79C2021B213ACA0022C7B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

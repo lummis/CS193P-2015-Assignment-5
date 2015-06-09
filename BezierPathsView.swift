@@ -19,7 +19,14 @@ class BezierPathsView: UIView
     
     override func drawRect(rect: CGRect) {
         for (_, path) in bezierPaths {
+            let c = UIGraphicsGetCurrentContext()
+            let strokeColor: [CGFloat] = [0.0, 1.0, 0.0, 1.0]
+            let fillColor: [CGFloat] = [1.0, 0.0, 0.0, 1.0]
+            CGContextSetStrokeColor(c, strokeColor)
+            CGContextSetFillColor(c, fillColor)
             path.stroke()
+            path.fill()
+            
         }
     }
 }

@@ -37,7 +37,8 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         
         animator.addBehavior(behaviors)
         installBricks(rows: 1, brickSize: CGSizeMake(35, 15))
-        installBall( CGSize(width: 50.0, height: 25.0), center: CGPoint(x: 0.5 * gameView.bounds.size.width, y: 0.5 * gameView.bounds.size.height) )
+//        installOvalBall( CGSize(width: 50.0, height: 25.0), center: CGPoint(x: 0.5 * gameView.bounds.size.width, y: 0.5 * gameView.bounds.size.height) )
+        installSquareBall(CGSize(width: 25, height: 25), center:CGPoint(x:100, y:100))
     }
     
     func installBricks (#rows: Int, brickSize: CGSize) {
@@ -62,33 +63,35 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         for row in 0..<rows {
             for col in 0..<bricksPerRowInt {
                 let frame = CGRectMake(CGFloat( sideSpace + CGFloat(col) *  (brickWidth  + brickSeparation) ), 20, brickWidth, brickSize.height)
-//                var brick = BezierPathsView(frame: frame)
                 var brick = UIView(frame: frame)
                 brick.backgroundColor = UIColor.redColor()
-                gameView.addSubview(brick)      // must come before animateBrick so brick is part of reference view
+                gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
                 behaviors.animateBrick(brick)
-                
             }
         }
     }
     
-    func installBall (size: CGSize, center: CGPoint) {
-        
+    func installOvalBall (size: CGSize, center: CGPoint) {
         let path = UIBezierPath()
         path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(0), endAngle:CGFloat(M_PI), clockwise: true)
         path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(M_PI), endAngle:CGFloat(0), clockwise:true)
         path.closePath()
         path.lineWidth = 15
         gameView.setPath(path, named: "BallPath")
-        
         behaviors.addBarrier(path, named: "Ball")
     }
     
-    func installSquareBall (size: CGSize) {
-        let frame = CGRectMake(100, 350, size.width, size.height)
-        var ball = UIView(frame: frame)
+    func installSquareBall (size: CGSize, center: CGPoint) {
+        let frame = CGRect(origin: CGPoint(x:center.x - size.width / 2, y: center.y - size.height / 2), size: size)
+        let ball = UIView(frame: frame)
         ball.backgroundColor = UIColor.greenColor()
         gameView.addSubview(ball)
         behaviors.animateBall(ball)
+    }
+    
+    func pathFromView (view: UIView) -> UIBezierPath {
+        var path = UIBezierPath()
+        // more here
+        return path
     }
 }

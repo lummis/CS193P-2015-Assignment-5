@@ -65,4 +65,9 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         boundaryCollisionBehavior.addItem(ball)
     }
     
+    func deanimateBall(ball: UIView) {
+        ballItemBehavior.removeItem(ball)
+        boundaryCollisionBehavior.removeItem(ball)
+    }
+    
 }

@@ -15,7 +15,7 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
     lazy var ballItemBehavior: UIDynamicItemBehavior = {
         let behavior = UIDynamicItemBehavior()
         behavior.allowsRotation = true
-        behavior.elasticity = 0.9
+        behavior.elasticity = 0.8
         return behavior
         }()
     
@@ -33,6 +33,7 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         return boundary
         }()
     
+    var pushBehavior = UIPushBehavior(items: [], mode: UIPushBehaviorMode.Instantaneous)
     
     override init() {
         super.init()
@@ -41,6 +42,13 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         addChildBehavior(brickItemBehavior)
         addChildBehavior(ballItemBehavior)
         addChildBehavior(boundaryCollisionBehavior)
+        addChildBehavior(pushBehavior)
+    }
+    
+    func pushBall(radians: CGFloat, strength: CGFloat) {
+        pushBehavior.angle = radians
+        pushBehavior.magnitude = strength
+        pushBehavior.active = true
     }
     
     func addBarrier(path: UIBezierPath, named name: String) {
@@ -63,11 +71,13 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
     func animateBall(ball: UIView) {
         ballItemBehavior.addItem(ball)
         boundaryCollisionBehavior.addItem(ball)
+        pushBehavior.addItem(ball)
     }
     
     func deanimateBall(ball: UIView) {
         ballItemBehavior.removeItem(ball)
         boundaryCollisionBehavior.removeItem(ball)
+        pushBehavior.removeItem(ball)
     }
     
 }

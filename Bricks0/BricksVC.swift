@@ -8,16 +8,24 @@
 
 import UIKit
 
-struct Constant {
+ struct Constant {
     
-    static let PaddleWidth = 20
-
+    static let PaddleWidth = CGFloat(20)
+    static let PushStrength = CGFloat(0.1)
+    static let BrickSize = CGSize(width:35, height:10)
+    static let BallSize = CGSize(width:25, height:25)
+    static let SideSpace = CGFloat(20)
+    static let NBrickRows = 5
+    static let BrickRowSpacing = CGFloat(10)
+    
 }
 
 class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate
 {
 
-    @IBOutlet weak var gameView: BezierPathsView!
+    @IBOutlet weak var gameView: UIView!
+    
+
  
     // the animator will be created the first time it is referenced
     // this satisfied the rule that everything has to be initialized but this can't be
@@ -30,15 +38,15 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         }()
     
     let behaviors = Behaviors()
-    let bez = BezierPathsView()
+    var ball: UIView = UIView(frame: CGRectZero)
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         animator.addBehavior(behaviors)
-        installBricks(rows: 1, brickSize: CGSizeMake(35, 15))
+        installBricks(rows: Constant.NBrickRows, brickSize:Constant.BrickSize)
 //        installOvalBall( CGSize(width: 50.0, height: 25.0), center: CGPoint(x: 0.5 * gameView.bounds.size.width, y: 0.5 * gameView.bounds.size.height) )
-        installSquareBall(CGSize(width: 25, height: 25), center:CGPoint(x:100, y:100))
+        installSquareBall(Constant.BallSize, center:CGPoint(x:100, y:100))
     }
     
     func installBricks (#rows: Int, brickSize: CGSize) {
@@ -52,7 +60,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             return
         }
         
-        let sideSpace = CGFloat(20)
+        let sideSpace = Constant.SideSpace
         let viewWidth = view.bounds.size.width
         let gameViewWidth = gameView.bounds.size.width
         let brickWidth = brickSize.width
@@ -62,7 +70,8 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         
         for row in 0..<rows {
             for col in 0..<bricksPerRowInt {
-                let frame = CGRectMake(CGFloat( sideSpace + CGFloat(col) *  (brickWidth  + brickSeparation) ), 20, brickWidth, brickSize.height)
+                let frame = CGRectMake(CGFloat(sideSpace + CGFloat(col) * (brickWidth + brickSeparation) ), Constant.BrickRowSpacing + (Constant.BrickRowSpacing + brickSize.height) * CGFloat(row),
+                    brickWidth, brickSize.height)
                 var brick = UIView(frame: frame)
                 brick.backgroundColor = UIColor.redColor()
                 gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
@@ -71,27 +80,49 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         }
     }
     
-    func installOvalBall (size: CGSize, center: CGPoint) {
-        let path = UIBezierPath()
-        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(0), endAngle:CGFloat(M_PI), clockwise: true)
-        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(M_PI), endAngle:CGFloat(0), clockwise:true)
-        path.closePath()
-        path.lineWidth = 15
-        gameView.setPath(path, named: "BallPath")
-        behaviors.addBarrier(path, named: "Ball")
-    }
+//    func installOvalBall (size: CGSize, center: CGPoint) {
+//        let path = UIBezierPath()
+//        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(0), endAngle:CGFloat(M_PI), clockwise: true)
+//        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(M_PI), endAngle:CGFloat(0), clockwise:true)
+//        path.closePath()
+//        path.lineWidth = 15
+//        gameView.setPath(path, named: "BallPath")
+//        behaviors.addBarrier(path, named: "Ball")
+//    }
     
     func installSquareBall (size: CGSize, center: CGPoint) {
         let frame = CGRect(origin: CGPoint(x:center.x - size.width / 2, y: center.y - size.height / 2), size: size)
-        let ball = UIView(frame: frame)
+        ball.frame = frame
         ball.backgroundColor = UIColor.greenColor()
         gameView.addSubview(ball)
         behaviors.animateBall(ball)
     }
     
-    func pathFromView (view: UIView) -> UIBezierPath {
-        var path = UIBezierPath()
-        // more here
-        return path
+    @IBAction func tapAction(sender: UITapGestureRecognizer) {
+        if sender.state == .Ended {
+            let tapLocation = sender.locationInView(gameView)
+            let ballLocation = ball.center
+            let angle = angleToward(ballLocation, from:tapLocation)
+            behaviors.pushBall(angle, strength: Constant.PushStrength)
+        }
+    }
+    
+    func angleToward(target: CGPoint, from: CGPoint) -> CGFloat {
+        
+        if from.y == target.y && from.x > target.x { return CGFloat(M_PI) }
+        if from.y == target.y && from.x < target.x { return CGFloat(0) }
+        if from.x == target.x && from.y > target.y { return CGFloat(M_PI_2) }
+        if from.x == target.x && from.y < target.y { return -CGFloat(M_PI_2) }
+        
+        if (from.y > target.y) && (from.x > target.x) {
+            return  atan( (target.y - from.y) / (target.x - from.x) ) - CGFloat(M_PI)
+            
+        } else if from.y < target.y && from.x > target.x {
+            return atan( (target.y - from.y) / (target.x - from.x) ) + CGFloat(M_PI)
+            
+        } else if from.x < target.x {
+            return atan( (target.y - from.y) / (target.x - from.x) )
+            
+        } else { println("should never get here"); return 12345 }
     }
 }

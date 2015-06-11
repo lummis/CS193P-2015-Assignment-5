@@ -27,13 +27,14 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         }()
     
     lazy var boundaryCollisionBehavior: UICollisionBehavior = {
-        let boundary = UICollisionBehavior()
-        boundary.translatesReferenceBoundsIntoBoundary = true
-        boundary.collisionDelegate = self
-        return boundary
+        let boundaryCollisionBehavior = UICollisionBehavior()
+        boundaryCollisionBehavior.translatesReferenceBoundsIntoBoundary = true
+        boundaryCollisionBehavior.collisionDelegate = self
+        return boundaryCollisionBehavior
         }()
     
     var pushBehavior = UIPushBehavior(items: [], mode: UIPushBehaviorMode.Instantaneous)
+
     
     override init() {
         super.init()
@@ -56,21 +57,39 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         boundaryCollisionBehavior.addBoundaryWithIdentifier(name, forPath: path)
     }
     
-    func animateBrick(brick: UIView) {
+    func animateBrick(brick: Brick, ball: UIView) {
         gravity.addItem(brick)
         brickItemBehavior.addItem(brick)
         boundaryCollisionBehavior.addItem(brick)
+        
+        var items: [AnyObject] = [ball, brick]
+        let ballBrickCollisionBehavior = UICollisionBehavior(items:items)
+        self.addChildBehavior(ballBrickCollisionBehavior)
+        brick.collisionBehavior = ballBrickCollisionBehavior
     }
     
-    func attachBrick(brick: UIView, anchor: CGPoint) {
+    func attachBrick(brick: Brick, anchor: CGPoint) {
         let attachmentBehavior = UIAttachmentBehavior(item: brick, attachedToAnchor: anchor)
+        brick.attachmentBehavior = attachmentBehavior
         self.addChildBehavior(attachmentBehavior)
+        brick.anchor = anchor
+    }
+    
+    func detachBrick(brick: Brick) {
+        if let attachmentBehavior = brick.attachmentBehavior {
+            self.removeChildBehavior(attachmentBehavior)
+            brick.attachmentBehavior = nil
+        }
     }
 
-    func deanimateBrick(brick: UIView) {
+    func deanimateBrick(brick: Brick) {
         gravity.removeItem(brick)
         brickItemBehavior.removeItem(brick)
         boundaryCollisionBehavior.removeItem(brick)
+        if brick.collisionBehavior != nil {
+            self.removeChildBehavior(brick.collisionBehavior!)
+        }
+        brick.collisionBehavior = nil
     }
     
     func animateBall(ball: UIView) {
@@ -83,6 +102,29 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         ballItemBehavior.removeItem(ball)
         boundaryCollisionBehavior.removeItem(ball)
         pushBehavior.removeItem(ball)
+    }
+    
+    func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item1: UIDynamicItem, withItem item2: UIDynamicItem, atPoint p: CGPoint) {
+        var brickItem: Brick?
+        if let brickItem = item1 as? Brick {
+            brickCollisionAction(brickItem)
+
+        } else if let brickItem = item2 as? Brick {
+            brickCollisionAction(brickItem)
+
+        } else { println("no brick") }
+    }
+    
+    func brickCollisionAction(brick: Brick?) {
+        if brick != nil {
+            let theBrick = brick!
+            if theBrick.backgroundColor == UIColor.redColor() {
+                theBrick.backgroundColor = UIColor.brownColor()
+            } else {
+                detachBrick(theBrick)
+            }
+            
+        }
     }
     
 }

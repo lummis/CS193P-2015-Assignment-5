@@ -14,7 +14,7 @@ import UIKit
     static let PushStrength = CGFloat(0.1)
     static let BrickSize = CGSize(width:35, height:10)
     static let BallSize = CGSize(width:25, height:25)
-    static let SideSpace = CGFloat(20)
+    static let SideSpace = CGFloat(15)
     static let TopSpace = CGFloat(20)
     static let NBrickRows = 3
     static let BrickRowSpacing = CGFloat(15)
@@ -25,8 +25,6 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
 {
 
     @IBOutlet weak var gameView: UIView!
-    
-
  
     // the animator will be created the first time it is referenced
     // this satisfied the rule that everything has to be initialized but this can't be
@@ -45,8 +43,9 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         super.viewDidAppear(animated)
         
         animator.addBehavior(behaviors)
-        installBricks(rows: Constant.NBrickRows, brickSize:Constant.BrickSize)
+        
         installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
+        installBricks()
     }
     
     func setAnchors() -> [CGPoint] {
@@ -68,22 +67,24 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         return points
     }
     
-    func installBricks (#rows: Int, brickSize: CGSize) {
+    func installBricks () {
+        let brickSize = Constant.BrickSize
         if brickSize.width > gameView.bounds.size.width / 8 || brickSize.height >= brickSize.width {
             println("bad brickSize")
             return
         }
         
+        // array of anchor points, one for each starting brick position
         let anchors: [CGPoint] = setAnchors()
         
         // put a brick on every anchor
         for anchor in anchors {
-            let origin = CGPoint(x: anchor.x - Constant.BrickSize.width / 2, y: anchor.y - Constant.BrickSize.height / 2)
-            let frame = CGRect(origin: origin, size: Constant.BrickSize)
-            var brick = UIView(frame: frame)
+            let origin = CGPoint(x: anchor.x - brickSize.width / 2, y: anchor.y - brickSize.height / 2)
+            let frame = CGRect(origin: origin, size: brickSize)
+            var brick = Brick(frame: frame)
             brick.backgroundColor = UIColor.redColor()
             gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
-            behaviors.animateBrick(brick)
+            behaviors.animateBrick(brick, ball: ball)
             behaviors.attachBrick(brick, anchor: anchor)
         }
     }

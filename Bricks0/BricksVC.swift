@@ -44,19 +44,34 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         super.viewDidAppear(animated)
         
         animator.addBehavior(behaviors)
+        var anchors: [CGPoint] = setAnchors()
         installBricks(rows: Constant.NBrickRows, brickSize:Constant.BrickSize)
-//        installOvalBall( CGSize(width: 50.0, height: 25.0), center: CGPoint(x: 0.5 * gameView.bounds.size.width, y: 0.5 * gameView.bounds.size.height) )
-        installSquareBall(Constant.BallSize, center:CGPoint(x:100, y:100))
+        installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
+    }
+    
+    func setAnchors() -> [CGPoint] {
+        let sideSpace = Constant.SideSpace
+        let viewWidth = view.bounds.size.width
+        let gameViewWidth = gameView.bounds.size.width
+        let brickWidth = Constant.BrickSize.width
+        let bricksPerRowFloat = (gameViewWidth - 2 * sideSpace) / brickWidth
+        let bricksPerRowInt = Int(bricksPerRowFloat) - 1
+        let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRowInt) * brickWidth) / CGFloat( (bricksPerRowInt - 1) )
+        
+        var points: [CGPoint] = []
+        for row in 0..<Constant.NBrickRows {
+            for col in 0..<bricksPerRowInt {
+                let point = CGPointMake(CGFloat(sideSpace + CGFloat(col) * (brickWidth + brickSeparation)),
+                                Constant.BrickRowSpacing + (Constant.BrickRowSpacing + Constant.BrickSize.height) * CGFloat(row))
+                points.append(point)
+            }
+        }
+        return points
     }
     
     func installBricks (#rows: Int, brickSize: CGSize) {
         if brickSize.width > gameView.bounds.size.width / 8 || brickSize.height >= brickSize.width {
             println("bad brickSize")
-            return
-        }
-        
-        if rows > 5 {
-            println("specified too many rows")
             return
         }
         
@@ -70,7 +85,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         
         for row in 0..<rows {
             for col in 0..<bricksPerRowInt {
-                let frame = CGRectMake(CGFloat(sideSpace + CGFloat(col) * (brickWidth + brickSeparation) ), Constant.BrickRowSpacing + (Constant.BrickRowSpacing + brickSize.height) * CGFloat(row),
+                let frame = CGRectMake(CGFloat(sideSpace + CGFloat(col) * (brickWidth + brickSeparation)), Constant.BrickRowSpacing + (Constant.BrickRowSpacing + brickSize.height) * CGFloat(row),
                     brickWidth, brickSize.height)
                 var brick = UIView(frame: frame)
                 brick.backgroundColor = UIColor.redColor()

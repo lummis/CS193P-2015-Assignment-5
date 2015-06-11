@@ -61,6 +61,11 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         brickItemBehavior.addItem(brick)
         boundaryCollisionBehavior.addItem(brick)
     }
+    
+    func attachBrick(brick: UIView, anchor: CGPoint) {
+        let attachmentBehavior = UIAttachmentBehavior(item: brick, attachedToAnchor: anchor)
+        self.addChildBehavior(attachmentBehavior)
+    }
 
     func deanimateBrick(brick: UIView) {
         gravity.removeItem(brick)

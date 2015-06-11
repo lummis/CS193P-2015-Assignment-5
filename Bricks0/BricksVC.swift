@@ -15,8 +15,9 @@ import UIKit
     static let BrickSize = CGSize(width:35, height:10)
     static let BallSize = CGSize(width:25, height:25)
     static let SideSpace = CGFloat(20)
-    static let NBrickRows = 5
-    static let BrickRowSpacing = CGFloat(10)
+    static let TopSpace = CGFloat(20)
+    static let NBrickRows = 3
+    static let BrickRowSpacing = CGFloat(15)
     
 }
 
@@ -44,25 +45,23 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         super.viewDidAppear(animated)
         
         animator.addBehavior(behaviors)
-        var anchors: [CGPoint] = setAnchors()
         installBricks(rows: Constant.NBrickRows, brickSize:Constant.BrickSize)
         installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
     }
     
     func setAnchors() -> [CGPoint] {
         let sideSpace = Constant.SideSpace
-        let viewWidth = view.bounds.size.width
         let gameViewWidth = gameView.bounds.size.width
         let brickWidth = Constant.BrickSize.width
-        let bricksPerRowFloat = (gameViewWidth - 2 * sideSpace) / brickWidth
-        let bricksPerRowInt = Int(bricksPerRowFloat) - 1
-        let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRowInt) * brickWidth) / CGFloat( (bricksPerRowInt - 1) )
+        let brickHeight = Constant.BrickSize.height
+        let bricksPerRow = Int( (gameViewWidth - 2 * sideSpace) / brickWidth ) - 1
+        let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRow) * brickWidth) / CGFloat( (bricksPerRow - 1) )
         
         var points: [CGPoint] = []
         for row in 0..<Constant.NBrickRows {
-            for col in 0..<bricksPerRowInt {
-                let point = CGPointMake(CGFloat(sideSpace + CGFloat(col) * (brickWidth + brickSeparation)),
-                                Constant.BrickRowSpacing + (Constant.BrickRowSpacing + Constant.BrickSize.height) * CGFloat(row))
+            for col in 0..<bricksPerRow {
+                let point = CGPoint(x:sideSpace + CGFloat(col) * (brickWidth + brickSeparation) + brickWidth / 2,
+                    y:Constant.TopSpace + brickHeight / 2 + CGFloat(row) * (Constant.BrickRowSpacing + brickHeight) )
                 points.append(point)
             }
         }
@@ -75,23 +74,17 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             return
         }
         
-        let sideSpace = Constant.SideSpace
-        let viewWidth = view.bounds.size.width
-        let gameViewWidth = gameView.bounds.size.width
-        let brickWidth = brickSize.width
-        let bricksPerRowFloat = (gameViewWidth - 2 * sideSpace) / brickWidth
-        let bricksPerRowInt = Int(bricksPerRowFloat) - 1
-        let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRowInt) * brickWidth) / CGFloat( (bricksPerRowInt - 1) )
+        let anchors: [CGPoint] = setAnchors()
         
-        for row in 0..<rows {
-            for col in 0..<bricksPerRowInt {
-                let frame = CGRectMake(CGFloat(sideSpace + CGFloat(col) * (brickWidth + brickSeparation)), Constant.BrickRowSpacing + (Constant.BrickRowSpacing + brickSize.height) * CGFloat(row),
-                    brickWidth, brickSize.height)
-                var brick = UIView(frame: frame)
-                brick.backgroundColor = UIColor.redColor()
-                gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
-                behaviors.animateBrick(brick)
-            }
+        // put a brick on every anchor
+        for anchor in anchors {
+            let origin = CGPoint(x: anchor.x - Constant.BrickSize.width / 2, y: anchor.y - Constant.BrickSize.height / 2)
+            let frame = CGRect(origin: origin, size: Constant.BrickSize)
+            var brick = UIView(frame: frame)
+            brick.backgroundColor = UIColor.redColor()
+            gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
+            behaviors.animateBrick(brick)
+            behaviors.attachBrick(brick, anchor: anchor)
         }
     }
     

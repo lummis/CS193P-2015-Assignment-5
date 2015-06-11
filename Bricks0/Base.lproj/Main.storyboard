@@ -18,7 +18,7 @@
                         <subviews>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="wpb-MP-Q4m" userLabel="gameView" customClass="BezierPathsView" customModule="Bricks0" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="70" width="600" height="530"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="JRF-xk-MsK" appends="YES" id="U01-WE-g8h"/>

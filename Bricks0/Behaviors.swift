@@ -10,6 +10,8 @@ import UIKit
 
 class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
 
+    var vc: BricksVC?
+    
     let gravity = UIGravityBehavior()
     
     lazy var ballItemBehavior: UIDynamicItemBehavior = {
@@ -135,6 +137,7 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         if theBrick.center.y > bottomRegionBoundary {
             deanimateBrick(theBrick)
             theBrick.removeFromSuperview()
+            vc?.nBricks--
         }
     }
     

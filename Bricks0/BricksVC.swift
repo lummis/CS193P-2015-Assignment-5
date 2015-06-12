@@ -12,16 +12,16 @@ import UIKit
     
     static let PaddleWidth = CGFloat(20)
     static let PushStrength = CGFloat(0.1)
-    static let BrickSize = CGSize(width:35, height:10)
+    static let BrickSize = CGSize(width:65, height:10)
     static let BallSize = CGSize(width:25, height:25)
     static let SideSpace = CGFloat(15)
     static let TopSpace = CGFloat(20)
-    static let NBrickRows = 3
+    static let NBrickRows = 1
     static let BrickRowSpacing = CGFloat(15)
     
 }
 
-class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate
+class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate
 {
 
     @IBOutlet weak var gameView: UIView!
@@ -38,6 +38,13 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     let behaviors = Behaviors()
     var ball: UIView = UIView(frame: CGRectZero)
+    var nBricks = 0 {
+        willSet {
+            if newValue == 0 {
+                gameOver()
+            }
+        }
+    }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -46,6 +53,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         behaviors.setBottomBoundary(gameView)
         installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
         installBricks()
+        behaviors.vc = self
     }
     
     func setAnchors() -> [CGPoint] {
@@ -69,10 +77,6 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     func installBricks () {
         let brickSize = Constant.BrickSize
-        if brickSize.width > gameView.bounds.size.width / 8 || brickSize.height >= brickSize.width {
-            println("bad brickSize")
-            return
-        }
         
         // array of anchor points, one for each starting brick position
         let anchors: [CGPoint] = setAnchors()
@@ -86,6 +90,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
             behaviors.animateBrick(brick, ball: ball)
             behaviors.attachBrick(brick, anchor: anchor)
+            nBricks++
         }
     }
     
@@ -140,5 +145,32 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             return atan( (target.y - from.y) / (target.x - from.x) )
             
         } else { println("should never get here"); return 12345 }
+    }
+    
+    func gameOver() {
+        println("gameOver")
+        
+        let alertView = UIAlertView.init(title: "Game Over", message: "Tap Reset to play again", delegate: self, cancelButtonTitle: "Exit")
+        let resetIndex = alertView.addButtonWithTitle("Reset")
+        alertView.delegate = self
+        alertView.show()
+    }
+    
+    func resetGame() {
+        println("reset")
+    }
+    
+    // MARK: - UIAlertViewDelegate
+    func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
+        println("buttonIndex: \(buttonIndex)")
+        
+        switch buttonIndex {
+        case 0:
+            exit(0)
+        case 1:
+            resetGame()
+        default:
+            break
+        }
     }
 }

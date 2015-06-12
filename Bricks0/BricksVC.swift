@@ -44,6 +44,11 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
                 gameOver()
             }
         }
+        didSet {
+            // I suspect a brick can go out of gameView so when no more are on screen the alertView doesn't pop up
+            // this will let me confirm that there are still one or more bricks left in that situation
+            println("nBricks: \(nBricks)")
+        }
     }
     
     override func viewDidAppear(animated: Bool) {

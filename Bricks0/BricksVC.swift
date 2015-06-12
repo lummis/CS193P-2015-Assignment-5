@@ -12,7 +12,7 @@ import UIKit
     
     static let PaddleWidth = CGFloat(20)
     static let PushStrength = CGFloat(0.1)
-    static let BrickSize = CGSize(width:65, height:10)
+    static let BrickSize = CGSize(width:55, height:10)
     static let BallSize = CGSize(width:25, height:25)
     static let SideSpace = CGFloat(15)
     static let TopSpace = CGFloat(20)
@@ -168,7 +168,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         case 0:
             exit(0)
         case 1:
-            resetGame()
+            installBricks()
         default:
             break
         }

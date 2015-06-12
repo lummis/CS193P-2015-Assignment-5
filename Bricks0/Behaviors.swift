@@ -34,7 +34,12 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         }()
     
     var pushBehavior = UIPushBehavior(items: [], mode: UIPushBehaviorMode.Instantaneous)
+    
+    var bottomRegionBoundary: CGFloat?
 
+    func setBottomBoundary(gameView: UIView) {
+        bottomRegionBoundary = 0.9 * gameView.bounds.size.height
+    }
     
     override init() {
         super.init()
@@ -107,23 +112,29 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
     func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item1: UIDynamicItem, withItem item2: UIDynamicItem, atPoint p: CGPoint) {
         var brickItem: Brick?
         if let brickItem = item1 as? Brick {
-            brickCollisionAction(brickItem)
+            brickCollisionAction(brickItem, otherItem: item2)
 
         } else if let brickItem = item2 as? Brick {
-            brickCollisionAction(brickItem)
+            brickCollisionAction(brickItem, otherItem: item1)
 
         } else { println("no brick") }
     }
     
-    func brickCollisionAction(brick: Brick?) {
-        if brick != nil {
-            let theBrick = brick!
-            if theBrick.backgroundColor == UIColor.redColor() {
-                theBrick.backgroundColor = UIColor.brownColor()
-            } else {
-                detachBrick(theBrick)
-            }
-            
+    func brickCollisionAction(brick: Brick?, otherItem: UIDynamicItem) {
+        if let brickItem = otherItem as? Brick {
+            return      // no action when 2 bricks collide
+        }
+        
+        let theBrick = brick!
+        if theBrick.backgroundColor == UIColor.redColor() {
+            theBrick.backgroundColor = UIColor.brownColor()
+        } else {
+            detachBrick(theBrick)
+        }
+        
+        if theBrick.center.y > bottomRegionBoundary {
+            deanimateBrick(theBrick)
+            theBrick.removeFromSuperview()
         }
     }
     

@@ -43,7 +43,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         super.viewDidAppear(animated)
         
         animator.addBehavior(behaviors)
-        
+        behaviors.setBottomBoundary(gameView)
         installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
         installBricks()
     }
@@ -111,8 +111,15 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         if sender.state == .Ended {
             let tapLocation = sender.locationInView(gameView)
             let ballLocation = ball.center
-            let angle = angleToward(ballLocation, from:tapLocation)
-            behaviors.pushBall(angle, strength: Constant.PushStrength)
+            if gameView.pointInside(ballLocation, withEvent: nil) {
+                let angle = angleToward(ballLocation, from:tapLocation)
+                behaviors.pushBall(angle, strength: Constant.PushStrength)
+            } else {
+                ball.center = tapLocation   // bring ball back if it goes outide of gameView
+                behaviors.deanimateBall(ball)
+                behaviors.animateBall(ball)
+                animator.updateItemUsingCurrentState(ball)
+            }
         }
     }
     

@@ -11,14 +11,14 @@ import UIKit
  struct Constant {
     
     static let PaddleWidth = CGFloat(20)
-    static let PushStrength = CGFloat(0.1)
-    static let BrickSize = CGSize(width:55, height:10)
-    static let BallSize = CGSize(width:25, height:25)
+    static let PushStrength = CGFloat(0.15)
+    static let BrickSize = CGSize(width:25, height:15)
+    static let BallSize = CGSize(width:25, height:15)
     static let SideSpace = CGFloat(15)
-    static let TopSpace = CGFloat(20)
-    static let NBrickRows = 1
-    static let BrickRowSpacing = CGFloat(15)
-    
+    static let TopSpace = CGFloat(10)
+    static let NBrickRows = 9
+    static let BrickRowSpacing = CGFloat(12)
+    static let InitialBallPosition = CGPoint(x: 75, y: 325)
 }
 
 class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate
@@ -54,11 +54,13 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        animator.addBehavior(behaviors)
-        behaviors.setBottomBoundary(gameView)
-        installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
-        installBricks()
-        behaviors.vc = self
+        if nBricks == 0 {
+            animator.addBehavior(behaviors)
+            behaviors.setBottomBoundary(gameView)
+            installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
+            installBricks()
+            behaviors.vc = self
+        }
     }
     
     func setAnchors() -> [CGPoint] {
@@ -110,7 +112,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
 //    }
     
     func installSquareBall (size: CGSize, center: CGPoint) {
-        let frame = CGRect(origin: CGPoint(x:center.x - size.width / 2, y: center.y - size.height / 2), size: size)
+        let frame = CGRect(origin: Constant.InitialBallPosition, size: size)
         ball.frame = frame
         ball.backgroundColor = UIColor.greenColor()
         gameView.addSubview(ball)

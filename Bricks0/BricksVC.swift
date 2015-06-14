@@ -10,13 +10,18 @@ import UIKit
 
  struct Constant {
     
-    static let PaddleWidth = CGFloat(20)
-    static let PushStrength = CGFloat(0.15)
-    static let BrickSize = CGSize(width:25, height:15)
+    static let BrickSize0 = CGSize(width: 30, height: 20)
+    static let BrickSize1 = CGSize(width: 50, height: 25)
+    static let BrickSize2 = CGSize(width: 75, height: 50)
+    static let BrickSize3 = CGSize(width: 150, height: 100)
+    
+    static let DefaultPushStrength = Float(0.15)
+    static let DefaultBrickSize = BrickSize1
+    static let DefaultBrickRows = 2
+    static let DefaultShowTime = false
     static let BallSize = CGSize(width:25, height:15)
     static let SideSpace = CGFloat(15)
     static let TopSpace = CGFloat(10)
-    static let NBrickRows = 9
     static let BrickRowSpacing = CGFloat(12)
     static let InitialBallPosition = CGPoint(x: 75, y: 325)
 }
@@ -37,7 +42,9 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         }()
     
     let behaviors = Behaviors()
+    var settingsVC: SettingsVC?
     var ball: UIView = UIView(frame: CGRectZero)
+    var brickSize: CGSize = Constant.DefaultBrickSize   // may be changed by setBrickSize(index)
     var nBricks = 0 {
         willSet {
             if newValue == 0 {
@@ -53,37 +60,38 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        // each time the view appears it is the same view controller instance
+        println("BricksVC/viewDidAppear; \(self)")
         
-        if nBricks == 0 {
-            animator.addBehavior(behaviors)
-            behaviors.setBottomBoundary(gameView)
-            installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
-            installBricks()
-            behaviors.vc = self
+        let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
+        settingsVC = tabBarViewControllers[1] as? SettingsVC
+        
+        if settingsVC != nil && settingsVC!.settingsChanged {
+            resetGame()
         }
+
     }
     
     func setAnchors() -> [CGPoint] {
         let sideSpace = Constant.SideSpace
         let gameViewWidth = gameView.bounds.size.width
-        let brickWidth = Constant.BrickSize.width
-        let brickHeight = Constant.BrickSize.height
+        let brickWidth = brickSize.width
+        let brickHeight = brickSize.height
         let bricksPerRow = Int( (gameViewWidth - 2 * sideSpace) / brickWidth ) - 1
         let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRow) * brickWidth) / CGFloat( (bricksPerRow - 1) )
         
         var points: [CGPoint] = []
-        for row in 0..<Constant.NBrickRows {
-            for col in 0..<bricksPerRow {
-                let point = CGPoint(x:sideSpace + CGFloat(col) * (brickWidth + brickSeparation) + brickWidth / 2,
-                    y:Constant.TopSpace + brickHeight / 2 + CGFloat(row) * (Constant.BrickRowSpacing + brickHeight) )
-                points.append(point)
-            }
-        }
+//        for row in 0..<Constant.NBrickRows {
+//            for col in 0..<bricksPerRow {
+//                let point = CGPoint(x:sideSpace + CGFloat(col) * (brickWidth + brickSeparation) + brickWidth / 2,
+//                    y:Constant.TopSpace + brickHeight / 2 + CGFloat(row) * (Constant.BrickRowSpacing + brickHeight) )
+//                points.append(point)
+//            }
+//        }
         return points
     }
     
     func installBricks () {
-        let brickSize = Constant.BrickSize
         
         // array of anchor points, one for each starting brick position
         let anchors: [CGPoint] = setAnchors()
@@ -125,7 +133,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             let ballLocation = ball.center
             if gameView.pointInside(ballLocation, withEvent: nil) {
                 let angle = angleToward(ballLocation, from:tapLocation)
-                behaviors.pushBall(angle, strength: Constant.PushStrength)
+//                behaviors.pushBall(angle, strength: Constant.PushStrength)
             } else {
                 ball.center = tapLocation   // bring ball back if it goes outide of gameView
                 behaviors.deanimateBall(ball)
@@ -164,7 +172,17 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     }
     
     func resetGame() {
-        println("reset")
+        let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
+        settingsVC = tabBarViewControllers[1] as? SettingsVC
+        
+        
+        println("resetGame")
+        animator.addBehavior(behaviors)
+        behaviors.setBottomBoundary(gameView)
+        installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
+        installBricks()
+        behaviors.vc = self
+
     }
     
     // MARK: - UIAlertViewDelegate
@@ -180,4 +198,6 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             break
         }
     }
+    
+
 }

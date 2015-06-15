@@ -137,7 +137,7 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         if theBrick.center.y > bottomRegionBoundary {
             deanimateBrick(theBrick)
             theBrick.removeFromSuperview()
-            vc?.nBricks--
+            vc!.bricks = vc!.bricks.filter( {$0 != theBrick} )
         }
     }
     

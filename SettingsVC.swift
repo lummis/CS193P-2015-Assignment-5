@@ -22,7 +22,7 @@ class SettingsVC: UIViewController {
     var bricksVC: BricksVC!
     
     var brickSize: CGSize!
-    var ballPushStrength: Float!
+    var ballPushStrength: CGFloat!
     var showGameTime: Bool!
     var brickRows: Int!
     
@@ -43,7 +43,7 @@ class SettingsVC: UIViewController {
         numberOfRowsStepper.value = Double(Constant.DefaultBrickRows)
         numberOfRowsStepper.addTarget(self, action: "setNumberOfRows", forControlEvents: .ValueChanged)
         
-        ballPushStrengthSlider.value = ballPushStrength
+        ballPushStrengthSlider.value = Float(ballPushStrength)
         ballPushStrengthSlider.addTarget(self, action: "setBallPushStrength", forControlEvents: .ValueChanged)
         
         showGameTimeSwitch.on = showGameTime
@@ -63,7 +63,7 @@ class SettingsVC: UIViewController {
     }
     
     func setBallPushStrength() {
-        ballPushStrength = ballPushStrengthSlider.value
+        ballPushStrength = CGFloat(ballPushStrengthSlider.value)
         settingsChanged = true
     }
     

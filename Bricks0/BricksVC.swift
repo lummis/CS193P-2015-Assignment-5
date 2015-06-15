@@ -15,15 +15,15 @@ import UIKit
     static let BrickSize2 = CGSize(width: 75, height: 50)
     static let BrickSize3 = CGSize(width: 150, height: 100)
     
-    static let DefaultPushStrength = Float(0.15)
+    static let DefaultPushStrength = CGFloat(0.15)
     static let DefaultBrickSize = BrickSize1
     static let DefaultBrickRows = 2
     static let DefaultShowTime = false
-    static let BallSize = CGSize(width:25, height:15)
-    static let SideSpace = CGFloat(15)
-    static let TopSpace = CGFloat(10)
-    static let BrickRowSpacing = CGFloat(12)
-    static let InitialBallPosition = CGPoint(x: 75, y: 325)
+    static let DefaultBallSize = CGSize(width:25, height:15)
+    static let BricksSideSpace = CGFloat(15)    // hor. distance from side bricks to gameView
+    static let BricksTopSpace = CGFloat(10)     // vert. distance from top bricks to gameView
+    static let BrickRowSpacing = CGFloat(12)    // vert. distance between brick rows
+    static let InitialBallPosition = CGPoint(x: 150, y: 300)
 }
 
 class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate
@@ -43,56 +43,66 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     let behaviors = Behaviors()
     var settingsVC: SettingsVC?
+    
+    var showGameTime = Constant.DefaultShowTime
     var ball: UIView = UIView(frame: CGRectZero)
-    var brickSize: CGSize = Constant.DefaultBrickSize   // may be changed by setBrickSize(index)
-    var nBricks = 0 {
+    var bricks: [Brick] = [] {
         willSet {
-            if newValue == 0 {
-                gameOver()
-            }
+            if newValue.count == 0 { gameOver() }
         }
         didSet {
             // I suspect a brick can go out of gameView so when no more are on screen the alertView doesn't pop up
             // this will let me confirm that there are still one or more bricks left in that situation
-            println("nBricks: \(nBricks)")
+            println("nBricks: \(bricks.count)")
         }
     }
+    var brickSize: CGSize = Constant.DefaultBrickSize   // may be changed by setBrickSize(index)
+    var brickRows = Constant.DefaultBrickRows
+    var ballPushStrength = Constant.DefaultPushStrength
+    var nBricks = 0
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        // each time the view appears it is the same view controller instance
+        // this stmt shows that each time the view appears it is the same view controller instance
         println("BricksVC/viewDidAppear; \(self)")
-        
+        resetGame()
+    }
+    
+    func resetGame() {
+        println("resetGame")
         let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
         settingsVC = tabBarViewControllers[1] as? SettingsVC
         
-        if settingsVC != nil && settingsVC!.settingsChanged {
-            resetGame()
+        if settingsVC == nil {
+            println("settingsVC is nil")
         }
-
+        
+        animator.addBehavior(behaviors)
+        behaviors.setBottomBoundary(gameView)
+        behaviors.vc = self
+        while !bricks.isEmpty {
+            let brick = bricks.removeLast()
+            behaviors.detachBrick(brick)
+            behaviors.deanimateBrick(brick)
+        }
+        copySettingsParameters(settingsVC!)
+        behaviors.deanimateBall(ball)
+        ball.removeFromSuperview()
+        // following stmt must be before installBricks so ball pre-exists bricks
+        installSquareBall(Constant.DefaultBallSize, center: Constant.InitialBallPosition)
+        installBricks()
     }
     
-    func setAnchors() -> [CGPoint] {
-        let sideSpace = Constant.SideSpace
-        let gameViewWidth = gameView.bounds.size.width
-        let brickWidth = brickSize.width
-        let brickHeight = brickSize.height
-        let bricksPerRow = Int( (gameViewWidth - 2 * sideSpace) / brickWidth ) - 1
-        let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRow) * brickWidth) / CGFloat( (bricksPerRow - 1) )
-        
-        var points: [CGPoint] = []
-//        for row in 0..<Constant.NBrickRows {
-//            for col in 0..<bricksPerRow {
-//                let point = CGPoint(x:sideSpace + CGFloat(col) * (brickWidth + brickSeparation) + brickWidth / 2,
-//                    y:Constant.TopSpace + brickHeight / 2 + CGFloat(row) * (Constant.BrickRowSpacing + brickHeight) )
-//                points.append(point)
-//            }
-//        }
-        return points
+    func copySettingsParameters(settingsVC: SettingsVC) {
+        if settingsVC.settingsChanged {
+            brickSize = settingsVC.brickSize
+            ballPushStrength = settingsVC.ballPushStrength
+            showGameTime = settingsVC.showGameTime
+            brickRows = settingsVC.brickRows
+        }
     }
     
     func installBricks () {
-        
         // array of anchor points, one for each starting brick position
         let anchors: [CGPoint] = setAnchors()
         
@@ -105,8 +115,27 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             gameView.addSubview(brick)      // before animateBrick so brick is part of reference view
             behaviors.animateBrick(brick, ball: ball)
             behaviors.attachBrick(brick, anchor: anchor)
-            nBricks++
+            bricks.append(brick)
         }
+    }
+    
+    func setAnchors() -> [CGPoint] {
+        let sideSpace = Constant.BricksSideSpace
+        let gameViewWidth = gameView.bounds.size.width
+        let brickWidth = brickSize.width
+        let brickHeight = brickSize.height
+        let bricksPerRow = Int( (gameViewWidth - 2 * sideSpace) / brickWidth ) - 1
+        let brickSeparation = (gameViewWidth - 2 * sideSpace - CGFloat(bricksPerRow) * brickWidth) / CGFloat( (bricksPerRow - 1) )
+        
+        var anchors: [CGPoint] = []
+        for row in 0..<brickRows {
+            for col in 0..<bricksPerRow {
+                let point = CGPoint(x:sideSpace + CGFloat(col) * (brickWidth + brickSeparation) + brickWidth / 2,
+                    y:Constant.BricksTopSpace + brickHeight / 2 + CGFloat(row) * (Constant.BrickRowSpacing + brickHeight) )
+                anchors.append(point)
+            }
+        }
+        return anchors
     }
     
 //    func installOvalBall (size: CGSize, center: CGPoint) {
@@ -133,7 +162,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             let ballLocation = ball.center
             if gameView.pointInside(ballLocation, withEvent: nil) {
                 let angle = angleToward(ballLocation, from:tapLocation)
-//                behaviors.pushBall(angle, strength: Constant.PushStrength)
+                behaviors.pushBall(angle, strength: ballPushStrength)
             } else {
                 ball.center = tapLocation   // bring ball back if it goes outide of gameView
                 behaviors.deanimateBall(ball)
@@ -171,20 +200,6 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         alertView.show()
     }
     
-    func resetGame() {
-        let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
-        settingsVC = tabBarViewControllers[1] as? SettingsVC
-        
-        
-        println("resetGame")
-        animator.addBehavior(behaviors)
-        behaviors.setBottomBoundary(gameView)
-        installSquareBall(Constant.BallSize, center:CGPoint(x:gameView.bounds.size.width / 2, y:gameView.bounds.size.height / 2))
-        installBricks()
-        behaviors.vc = self
-
-    }
-    
     // MARK: - UIAlertViewDelegate
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         println("buttonIndex: \(buttonIndex)")
@@ -193,7 +208,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         case 0:
             exit(0)
         case 1:
-            installBricks()
+            resetGame()
         default:
             break
         }

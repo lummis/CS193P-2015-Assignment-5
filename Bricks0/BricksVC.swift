@@ -44,14 +44,13 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     let behaviors = Behaviors()
     var settingsVC: SettingsVC?
-    
-    var showGameTime = Constant.DefaultShowTime
     var ball: UIView?
     var bricks: [Brick] = []
+    
+    var showGameTime = Constant.DefaultShowTime
     var brickSize: CGSize = Constant.DefaultBrickSize   // may be changed by setBrickSize(index)
     var brickRows = Constant.DefaultBrickRows
     var ballPushStrength = Constant.DefaultPushStrength
-    var nBricks = 0
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
@@ -71,6 +70,20 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         settingsVC?.settingsTabSelected = false
         behaviors.bricksVC = self
         
+        // if userDefaults exists read it and set parameters to its values
+        // if not the parameters stay at their default values set above
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let width = defaults.floatForKey("brickWidth")
+        // in the first run userDefaults doesn't exist and width will be set to zero
+        // so the parameters need to stay at their default values
+        if width != 0 {
+            let height = defaults.floatForKey("brickHeight")
+            brickSize = CGSize(width: CGFloat(width), height: CGFloat(height))
+            showGameTime = defaults.boolForKey("showTime")
+            ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
+            brickRows = Int(defaults.integerForKey("rows"))
+        }
+        
         gameTimeLabel.text = "hello" 
         
         while !bricks.isEmpty {
@@ -86,7 +99,10 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         }
         
         animator.removeAllBehaviors()
-        if settingsVC?.settingsChanged == true { copySettingsParameters(self.settingsVC!) }
+        if settingsVC?.settingsChanged == true {
+            copySettingsParameters(self.settingsVC!)
+            persistParameters()
+        }
         behaviors.addBottomRegion(gameView) // after copy... because bottomRegionY depends on brick size
         animator.addBehavior(behaviors)
         // following stmt must be before installBricks so ball pre-exists bricks
@@ -100,6 +116,18 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         ballPushStrength = settingsVC.ballPushStrength
         showGameTime = settingsVC.showGameTime
         brickRows = settingsVC.brickRows
+    }
+    
+    func persistParameters() {
+        let brickWidthFloat = Float(brickSize.width)
+        let brickHeightFloat = Float(brickSize.height)
+        let ballPushStrengthFloat = Float(ballPushStrength)
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setFloat(brickWidthFloat, forKey: "brickWidth")
+        defaults.setFloat(brickHeightFloat, forKey: "brickHeight")
+        defaults.setFloat(ballPushStrengthFloat, forKey: "pushStrength")
+        defaults.setBool(showGameTime, forKey: "showTime")
+        defaults.setInteger(brickRows, forKey: "rows")
     }
     
     func installBricks () {

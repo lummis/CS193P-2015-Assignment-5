@@ -10,7 +10,7 @@ import UIKit
 
 class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
 
-    var vc: BricksVC?
+    var bricksVC: BricksVC?
     
     let gravity = UIGravityBehavior()
     
@@ -137,7 +137,8 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         if theBrick.center.y > bottomRegionBoundary {
             deanimateBrick(theBrick)
             theBrick.removeFromSuperview()
-            vc!.bricks = vc!.bricks.filter( {$0 != theBrick} )
+            bricksVC!.bricks = bricksVC!.bricks.filter( {$0 != theBrick} )
+            if bricksVC!.bricks.isEmpty { bricksVC?.gameOver() }
         }
     }
     

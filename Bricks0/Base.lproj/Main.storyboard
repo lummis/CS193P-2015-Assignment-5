@@ -79,10 +79,10 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="EGi-vD-73w">
                                 <rect key="frame" x="16" y="450" width="277" height="29"/>
                                 <segments>
+                                    <segment title="15 x 10"/>
                                     <segment title="30 x 20"/>
                                     <segment title="50 x 25"/>
-                                    <segment title="75 x 50"/>
-                                    <segment title="150 x 100"/>
+                                    <segment title="70 x 35"/>
                                 </segments>
                             </segmentedControl>
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="UIf-qz-pSr">

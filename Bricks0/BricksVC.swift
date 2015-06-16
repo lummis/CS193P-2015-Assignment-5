@@ -10,10 +10,10 @@ import UIKit
 
  struct Constant {
     
-    static let BrickSize0 = CGSize(width: 30, height: 20)
-    static let BrickSize1 = CGSize(width: 50, height: 25)
-    static let BrickSize2 = CGSize(width: 75, height: 50)
-    static let BrickSize3 = CGSize(width: 150, height: 100)
+    static let BrickSize0 = CGSize(width: 15, height: 10)
+    static let BrickSize1 = CGSize(width: 30, height: 20)
+    static let BrickSize2 = CGSize(width: 50, height: 25)
+    static let BrickSize3 = CGSize(width: 70, height: 35)
     
     static let DefaultPushStrength = CGFloat(0.15)
     static let DefaultBrickSize = BrickSize1
@@ -46,16 +46,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     var showGameTime = Constant.DefaultShowTime
     var ball: UIView?
-    var bricks: [Brick] = [] {
-        willSet {
-            if newValue.count == 0 { gameOver() }
-        }
-        didSet {
-            // I suspect a brick can go out of gameView so when no more are on screen the alertView doesn't pop up
-            // this will let me confirm that there are still one or more bricks left in that situation
-            println("nBricks: \(bricks.count)")
-        }
-    }
+    var bricks: [Brick] = []
     var brickSize: CGSize = Constant.DefaultBrickSize   // may be changed by setBrickSize(index)
     var brickRows = Constant.DefaultBrickRows
     var ballPushStrength = Constant.DefaultPushStrength
@@ -70,16 +61,18 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     func resetGame() {
         println("resetGame")
-        println("settingsVC: \(settingsVC)")
         
         let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
         settingsVC = tabBarViewControllers[1] as? SettingsVC
+        println("settingsVC: \(settingsVC)")
+        
         behaviors.setBottomBoundary(gameView)
-        behaviors.vc = self
+        behaviors.bricksVC = self
         while !bricks.isEmpty {
             let brick = bricks.removeLast()
             behaviors.detachBrick(brick)
             behaviors.deanimateBrick(brick)
+            brick.removeFromSuperview()
         }
 
         if ball != nil {
@@ -96,13 +89,12 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         installBricks()
     }
     
+    // when called we already verified that settingsVC != nil
     func copySettingsParameters(settingsVC: SettingsVC) {
-        if settingsVC.settingsChanged {
-            brickSize = settingsVC.brickSize
-            ballPushStrength = settingsVC.ballPushStrength
-            showGameTime = settingsVC.showGameTime
-            brickRows = settingsVC.brickRows
-        }
+        brickSize = settingsVC.brickSize
+        ballPushStrength = settingsVC.ballPushStrength
+        showGameTime = settingsVC.showGameTime
+        brickRows = settingsVC.brickRows
     }
     
     func installBricks () {

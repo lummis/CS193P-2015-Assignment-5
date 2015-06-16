@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="wpb-MP-Q4m" userLabel="gameView" customClass="BezierPathsView" customModule="Bricks0" customModuleProvider="target">
+                            <view contentMode="scaleToFill" misplaced="YES" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="wpb-MP-Q4m" userLabel="gameView" customClass="BezierPathsView" customModule="Bricks0" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="73" width="600" height="478"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <gestureRecognizers/>
@@ -24,6 +24,15 @@
                                     <outletCollection property="gestureRecognizers" destination="JRF-xk-MsK" appends="YES" id="U01-WE-g8h"/>
                                 </connections>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GameTime" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAL-qE-I1q">
+                                <rect key="frame" x="246" y="28" width="108" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="108" id="AD2-EK-03z"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -31,11 +40,17 @@
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="wpb-MP-Q4m" secondAttribute="bottom" id="9LU-Rq-860"/>
                             <constraint firstItem="wpb-MP-Q4m" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="VMp-wK-A1s"/>
                             <constraint firstItem="wpb-MP-Q4m" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="53" id="Y56-26-Nqo"/>
+                            <constraint firstItem="bAL-qE-I1q" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="fFn-mP-F65"/>
+                            <constraint firstItem="bAL-qE-I1q" firstAttribute="centerX" secondItem="wpb-MP-Q4m" secondAttribute="centerX" id="nkU-eJ-inA"/>
                             <constraint firstItem="wpb-MP-Q4m" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="rEg-R8-juQ"/>
+                            <constraint firstItem="wpb-MP-Q4m" firstAttribute="top" secondItem="bAL-qE-I1q" secondAttribute="bottom" constant="24" id="syQ-jF-1o3"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Play" id="sD6-ir-KDJ"/>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="gameTimeLabel" destination="bAL-qE-I1q" id="wZV-4H-Ua9"/>
                         <outlet property="gameView" destination="wpb-MP-Q4m" id="Nlv-Ox-VMe"/>
                     </connections>
                 </viewController>
@@ -119,6 +134,8 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" id="9wC-hS-vuX"/>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="ballPushStrengthSlider" destination="UIf-qz-pSr" id="LNA-Ti-qPO"/>
                         <outlet property="brickSizeControl" destination="EGi-vD-73w" id="7s0-xr-da3"/>

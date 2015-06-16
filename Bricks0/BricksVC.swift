@@ -30,6 +30,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
 {
 
     @IBOutlet weak var gameView: UIView!
+    @IBOutlet weak var gameTimeLabel: UILabel!
  
     // the animator will be created the first time it is referenced
     // this satisfied the rule that everything has to be initialized but this can't be
@@ -69,6 +70,8 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         }
         settingsVC?.settingsTabSelected = false
         behaviors.bricksVC = self
+        
+        gameTimeLabel.text = "hello" 
         
         while !bricks.isEmpty {
             let brick = bricks.removeLast()

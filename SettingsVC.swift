@@ -25,6 +25,7 @@ class SettingsVC: UIViewController {
     var ballPushStrength: CGFloat!
     var showGameTime: Bool!
     var brickRows: Int!
+    var settingsTabSelected = false
     
     // set false when view appears, set true if user changes a setting
     var settingsChanged = false
@@ -54,6 +55,7 @@ class SettingsVC: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
+        settingsTabSelected = true
         settingsChanged = false
     }
     

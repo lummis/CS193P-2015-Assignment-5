@@ -11,6 +11,7 @@ import UIKit
 class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
 
     var bricksVC: BricksVC?
+    var bottomRegion: UIView?
     
     let gravity = UIGravityBehavior()
     
@@ -35,12 +36,34 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         return boundaryCollisionBehavior
         }()
     
+    func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item1: UIDynamicItem, withItem item2: UIDynamicItem, atPoint p: CGPoint) {
+        var brickItem: Brick?
+        if let brickItem = item1 as? Brick {
+            brickCollisionAction(brickItem, otherItem: item2)
+            
+        } else if let brickItem = item2 as? Brick {
+            brickCollisionAction(brickItem, otherItem: item1)
+            
+        } else { println("no brick") }
+    }
+    
     var pushBehavior = UIPushBehavior(items: [], mode: UIPushBehaviorMode.Instantaneous)
     
-    var bottomRegionBoundary: CGFloat?
+    // if the ball hits a brick when the center of the brick is within the bottom region
+    // the brick is removed and disappears
+    // bottomRegionY is the y value at top of bottom region
+    var bottomRegionY: CGFloat?
 
-    func setBottomBoundary(gameView: UIView) {
-        bottomRegionBoundary = 0.9 * gameView.bounds.size.height
+    func addBottomRegion(gameView: UIView) {
+        bottomRegion?.removeFromSuperview()
+        let bottomRegionHeight = 0.75 * bricksVC!.brickSize.width
+        bottomRegion = UIView(frame: CGRectMake(0, gameView.frame.size.height
+            - bottomRegionHeight, gameView.frame.size.width, bottomRegionHeight))
+        bottomRegion!.backgroundColor = UIColor.lightGrayColor()
+        bottomRegion!.alpha = 0.1
+        gameView.addSubview(bottomRegion!)
+        bottomRegionY = gameView.frame.size.height - bottomRegionHeight
+        println("bottomRegionY: \(bottomRegionY)")
     }
     
     override init() {
@@ -111,17 +134,6 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         pushBehavior.removeItem(ball)
     }
     
-    func collisionBehavior(behavior: UICollisionBehavior, beganContactForItem item1: UIDynamicItem, withItem item2: UIDynamicItem, atPoint p: CGPoint) {
-        var brickItem: Brick?
-        if let brickItem = item1 as? Brick {
-            brickCollisionAction(brickItem, otherItem: item2)
-
-        } else if let brickItem = item2 as? Brick {
-            brickCollisionAction(brickItem, otherItem: item1)
-
-        } else { println("no brick") }
-    }
-    
     func brickCollisionAction(brick: Brick?, otherItem: UIDynamicItem) {
         if let brickItem = otherItem as? Brick {
             return      // no action when 2 bricks collide
@@ -134,7 +146,8 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
             detachBrick(theBrick)
         }
         
-        if theBrick.center.y > bottomRegionBoundary {
+        // remove brick if its center is in the bottom region
+        if theBrick.center.y > bottomRegionY {
             deanimateBrick(theBrick)
             theBrick.removeFromSuperview()
             bricksVC!.bricks = bricksVC!.bricks.filter( {$0 != theBrick} )

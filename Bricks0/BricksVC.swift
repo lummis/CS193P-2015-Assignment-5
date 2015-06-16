@@ -54,9 +54,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        // this stmt shows that each time the view appears it is the same view controller instance
-        println("BricksVC/viewDidAppear; \(self)")
-        resetGame() // does nothing if settingsVC != nil and parameters didn't change
+        resetGame()
     }
     
     func resetGame() {
@@ -65,9 +63,13 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
         settingsVC = tabBarViewControllers[1] as? SettingsVC
         println("settingsVC: \(settingsVC)")
-        
-        behaviors.setBottomBoundary(gameView)
+        if settingsVC?.settingsTabSelected == true && settingsVC?.settingsChanged == false {
+            settingsVC?.settingsTabSelected = false
+            return
+        }
+        settingsVC?.settingsTabSelected = false
         behaviors.bricksVC = self
+        
         while !bricks.isEmpty {
             let brick = bricks.removeLast()
             behaviors.detachBrick(brick)
@@ -79,17 +81,17 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             behaviors.deanimateBall(ball!)
             ball!.removeFromSuperview()
         }
+        
         animator.removeAllBehaviors()
-        if settingsVC != nil && settingsVC!.settingsChanged == true {
-            copySettingsParameters(settingsVC!)
-        }
+        if settingsVC?.settingsChanged == true { copySettingsParameters(self.settingsVC!) }
+        behaviors.addBottomRegion(gameView) // after copy... because bottomRegionY depends on brick size
         animator.addBehavior(behaviors)
         // following stmt must be before installBricks so ball pre-exists bricks
         installSquareBall(Constant.BallSize, center: Constant.InitialBallPosition)
         installBricks()
     }
     
-    // when called we already verified that settingsVC != nil
+    // this is called only if settingsVC != nil
     func copySettingsParameters(settingsVC: SettingsVC) {
         brickSize = settingsVC.brickSize
         ballPushStrength = settingsVC.ballPushStrength

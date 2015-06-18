@@ -20,7 +20,7 @@ class SettingsVC: UIViewController {
     }
     
     var bricksVC: BricksVC!
-    var settingsTabSelected = false
+    var settingsViewEntered = false
     
     // settable parameters
     var brickSize: CGSize!
@@ -56,7 +56,7 @@ class SettingsVC: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        settingsTabSelected = true
+        settingsViewEntered = true
         settingsChanged = false
     }
     

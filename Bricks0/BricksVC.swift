@@ -79,28 +79,45 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     func resetGame() {
         let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
         settingsVC = tabBarViewControllers[1] as? SettingsVC
-        if settingsVC?.settingsTabSelected == true && settingsVC?.settingsChanged == false {
-            settingsVC?.settingsTabSelected = false
+        if settingsVC?.settingsViewEntered == true && settingsVC?.settingsChanged == false {
+            // user looked at settings but didn't change anything so carry on
             return
         }
-        settingsVC?.settingsTabSelected = false // we reacted to true above, now reset for next time
-        behaviors.bricksVC = self
         
-        // if userDefaults exists read it and set parameters to its values
-        // if not the parameters stay at their default values set above
-        // if the file doesn't exist NSUserDefaults returns float 0
-        // on the first run userDefaults won't exist and width will be set to zero
-        // so the parameters will stay at their default values
-        let defaults = NSUserDefaults.standardUserDefaults()
-        let width = defaults.floatForKey("brickWidth")
-        if width != 0 {
-            let height = defaults.floatForKey("brickHeight")
-            brickSize = CGSize(width: CGFloat(width), height: CGFloat(height))
-            showGameTime = defaults.boolForKey("showTime")
-            ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
-            brickRows = Int(defaults.integerForKey("rows"))
+        // stop sessionTime update. Start it again on the first tapAction
+        let timer = RCLElapsedTimer.sharedTimer
+        timer.delegate = self
+        timer.stop()
+        sessionTime = 0
+        
+        if settingsVC?.settingsViewEntered == true {
+            // settings were changed (if not changed we would have returned above)
+            // so we're not doing initial set up
+            copySettingsParameters(self.settingsVC!)
+            persistParameters()
             
-            settingsVC!.updateFromUserDefaults()
+        } else {
+            // we're doing initial set up
+        
+            behaviors.bricksVC = self
+        
+            // if userDefaults exists read it and set parameters to its values
+            // if not the parameters stay at their default values set above
+            // if the NSUserDefaults preference file doesn't exist NSUserDefaults returns float 0
+            // for width. That provides an indication that the preference file doesn't exist yet.
+            // The preference file won't exist on the first run and width will be set to zero
+            // so the parameters will stay at their default values
+            let defaults = NSUserDefaults.standardUserDefaults()
+            let width = defaults.floatForKey("brickWidth")
+            if width != 0 {
+                let height = defaults.floatForKey("brickHeight")
+                brickSize = CGSize(width: CGFloat(width), height: CGFloat(height))
+                showGameTime = defaults.boolForKey("showTime")
+                ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
+                brickRows = Int(defaults.integerForKey("rows"))
+                
+                settingsVC!.updateFromUserDefaults()
+            }
         }
         
         gameTimeLabel.hidden = !showGameTime
@@ -121,10 +138,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         }
         
         animator.removeAllBehaviors()
-        if settingsVC?.settingsChanged == true {
-            copySettingsParameters(self.settingsVC!)
-            persistParameters()
-        }
+
         behaviors.addBottomRegion(gameView) // after copy... because bottomRegionY depends on brick size
         animator.addBehavior(behaviors)
         // following stmt must be before installBricks so ball pre-exists bricks

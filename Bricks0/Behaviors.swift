@@ -146,8 +146,8 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
             detachBrick(theBrick)
         }
         
-        // remove brick if its center is in the bottom region
-        if theBrick.center.y > bottomRegionY {
+        // remove brick if it's in the bottom region
+        if theBrick.backgroundColor == Constant.BottomRegionBrickColor {
             deanimateBrick(theBrick)
             theBrick.removeFromSuperview()
             bricksVC!.bricks = bricksVC!.bricks.filter( {$0 != theBrick} )

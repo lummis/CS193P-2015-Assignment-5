@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D60BD191B30946C00C25178 /* RCLElapsedTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */; };
 		7D6E930D1B253B2D002BE1EA /* Behaviors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E930C1B253B2D002BE1EA /* Behaviors.swift */; };
 		7D79C1E41B213ACA0022C7B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */; };
 		7D79C1E91B213ACA0022C7B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D79C1E71B213ACA0022C7B4 /* Main.storyboard */; };
@@ -30,6 +31,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCLElapsedTimer.swift; sourceTree = "<group>"; };
+		7D60BD1A1B31141D00C25178 /* ToDo & Notes */ = {isa = PBXFileReference; lastKnownFileType = text; name = "ToDo & Notes"; path = "Bricks0/ToDo & Notes"; sourceTree = "<group>"; };
 		7D6E930C1B253B2D002BE1EA /* Behaviors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Behaviors.swift; sourceTree = "<group>"; };
 		7D79C1DE1B213ACA0022C7B4 /* Bricks0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bricks0.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D79C1E21B213ACA0022C7B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -67,6 +70,7 @@
 		7D79C1D51B213ACA0022C7B4 = {
 			isa = PBXGroup;
 			children = (
+				7D60BD1A1B31141D00C25178 /* ToDo & Notes */,
 				7D79C1E01B213ACA0022C7B4 /* Bricks0 */,
 				7D79C1F61B213ACA0022C7B4 /* Bricks0Tests */,
 				7D79C1DF1B213ACA0022C7B4 /* Products */,
@@ -88,6 +92,7 @@
 				7D79C1E71B213ACA0022C7B4 /* Main.storyboard */,
 				7DD5F3051B2A835C0081FBB1 /* SettingsVC.swift */,
 				7D79C2031B213B400022C7B4 /* BricksVC.swift */,
+				7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */,
 				7D6E930C1B253B2D002BE1EA /* Behaviors.swift */,
 				7DD5F3011B2A122D0081FBB1 /* Brick.swift */,
 				7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */,
@@ -230,6 +235,7 @@
 				7D79C2041B213B400022C7B4 /* BricksVC.swift in Sources */,
 				7D79C1E41B213ACA0022C7B4 /* AppDelegate.swift in Sources */,
 				7D6E930D1B253B2D002BE1EA /* Behaviors.swift in Sources */,
+				7D60BD191B30946C00C25178 /* RCLElapsedTimer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,21 @@
+
+Sometimes a brick gets out of gameView. Could verify every brick is within gameView frequently,
+maybe once per timer tick, and just remove any that are not.
+
+The logic of the Bool showGameTime seems simple but it keeps being messed up.
+
+When launched need to sync the settings view with the state of the parameters gotten from
+user defaults.
+
+In settings view show the parameter values in the table
+
+Play time label should start at 0 when the game is reset
+
+Changing number of rows with stepper in the Settings scene sometimes? doesn't have an effect in
+the Play scene.
+
+Find a way to change color of bricks in the bottom region and ready to be removed.
+
+When ball is brought back from being lost set its velocity to 0.
+
+Print comment when removing lost brick.

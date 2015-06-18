@@ -19,14 +19,16 @@ import UIKit
     static let DefaultBrickSize = BrickSize1
     static let DefaultBrickRows = 2
     static let DefaultShowTime = false
+    
     static let BallSize = CGSize(width:25, height:25)
     static let BricksSideSpace = CGFloat(15)    // hor. distance from side bricks to gameView
-    static let BricksTopSpace = CGFloat(10)     // vert. distance from top bricks to gameView
+    static let BricksTopSpace = CGFloat(40)     // vert. distance from top bricks to gameView
     static let BrickRowSpacing = CGFloat(12)    // vert. distance between brick rows
     static let InitialBallPosition = CGPoint(x: 150, y: 300)
+    static let BottomRegionBrickColor = UIColor.orangeColor()
 }
 
-class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate
+class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate, RCLElapsedTimerDelegate
 {
 
     @IBOutlet weak var gameView: UIView!
@@ -47,44 +49,64 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     var ball: UIView?
     var bricks: [Brick] = []
     
-    var showGameTime = Constant.DefaultShowTime
+    // these 4 properties are settable in the Settings tab and
+    // are persisted in NSUserDefaults
+    var showGameTime = Constant.DefaultShowTime {
+        didSet {
+            gameTimeLabel.hidden = !showGameTime
+        }
+    }
     var brickSize: CGSize = Constant.DefaultBrickSize   // may be changed by setBrickSize(index)
     var brickRows = Constant.DefaultBrickRows
     var ballPushStrength = Constant.DefaultPushStrength
     
+    // MARK: - RCLElapsedTimerDelegate property
+    var sessionTime: Float = 0 {
+        didSet {
+            updateGameTimeLabel(sessionTime)
+            removeLostBricks()
+            updateBricksInBottomRegion()
+        }
+    }
+    
+    
+    // MARK: - Methods
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         resetGame()
     }
     
     func resetGame() {
-        println("resetGame")
-        
         let tabBarViewControllers = tabBarController!.viewControllers as! [UIViewController]
         settingsVC = tabBarViewControllers[1] as? SettingsVC
-        println("settingsVC: \(settingsVC)")
         if settingsVC?.settingsTabSelected == true && settingsVC?.settingsChanged == false {
             settingsVC?.settingsTabSelected = false
             return
         }
-        settingsVC?.settingsTabSelected = false
+        settingsVC?.settingsTabSelected = false // we reacted to true above, now reset for next time
         behaviors.bricksVC = self
         
         // if userDefaults exists read it and set parameters to its values
         // if not the parameters stay at their default values set above
+        // if the file doesn't exist NSUserDefaults returns float 0
+        // on the first run userDefaults won't exist and width will be set to zero
+        // so the parameters will stay at their default values
         let defaults = NSUserDefaults.standardUserDefaults()
         let width = defaults.floatForKey("brickWidth")
-        // in the first run userDefaults doesn't exist and width will be set to zero
-        // so the parameters need to stay at their default values
         if width != 0 {
             let height = defaults.floatForKey("brickHeight")
             brickSize = CGSize(width: CGFloat(width), height: CGFloat(height))
             showGameTime = defaults.boolForKey("showTime")
             ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
             brickRows = Int(defaults.integerForKey("rows"))
+            
+            settingsVC!.updateFromUserDefaults()
         }
         
-        gameTimeLabel.text = "hello" 
+        gameTimeLabel.hidden = !showGameTime
+//        var labelText: String = NSString(format: "Play time: %4.0f", sessionTime) as String
+//        gameTimeLabel.text = labelText
+        updateGameTimeLabel(sessionTime)
         
         while !bricks.isEmpty {
             let brick = bricks.removeLast()
@@ -119,15 +141,37 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     }
     
     func persistParameters() {
-        let brickWidthFloat = Float(brickSize.width)
-        let brickHeightFloat = Float(brickSize.height)
-        let ballPushStrengthFloat = Float(ballPushStrength)
         let defaults = NSUserDefaults.standardUserDefaults()
-        defaults.setFloat(brickWidthFloat, forKey: "brickWidth")
-        defaults.setFloat(brickHeightFloat, forKey: "brickHeight")
-        defaults.setFloat(ballPushStrengthFloat, forKey: "pushStrength")
+        defaults.setFloat(Float(brickSize.width), forKey: "brickWidth")
+        defaults.setFloat(Float(brickSize.height), forKey: "brickHeight")
+        defaults.setFloat(Float(ballPushStrength), forKey: "pushStrength")
         defaults.setBool(showGameTime, forKey: "showTime")
         defaults.setInteger(brickRows, forKey: "rows")
+    }
+    
+    func updateGameTimeLabel(sessionTime: Float) {
+        gameTimeLabel.text = String(format: "Play Time: %4.0f", sessionTime)
+    }
+    
+    func removeLostBricks() {
+        for brick in bricks {
+            if !gameView.pointInside(brick.center, withEvent: nil) {
+                behaviors.detachBrick(brick)
+                behaviors.deanimateBrick(brick)
+                brick.removeFromSuperview()
+                println("A lost brick was removed. Number of remaining bricks: \(bricks.count).")
+                bricks = bricks.filter( {$0 != brick} )
+                if bricks.isEmpty { gameOver() }
+            }
+        }
+    }
+    
+    func updateBricksInBottomRegion() {
+        for brick in bricks {
+            if brick.center.y > behaviors.bottomRegionY {
+                brick.backgroundColor = Constant.BottomRegionBrickColor
+            }
+        }
     }
     
     func installBricks () {
@@ -189,22 +233,29 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         if sender.state == .Ended {
             let tapLocation = sender.locationInView(gameView)
             let ballLocation = ball!.center
-            if gameView.pointInside(ballLocation, withEvent: nil) {
+            if gameView.pointInside(ballLocation, withEvent: nil) {  // test for ball out of bounds
                 let angle = angleToward(ballLocation, from:tapLocation)
                 behaviors.pushBall(angle, strength: ballPushStrength)
             } else {
-                ball!.center = tapLocation   // bring ball back if it goes outide of gameView
+                // I can't figure out how to bring the existing ball back with zero velocity
+                // so I'm removing it and creating a new ball at the topLocation
+                println("Ball seems to be lost. ballLocation: \(ballLocation)")
                 behaviors.deanimateBall(ball!)
-                behaviors.animateBall(ball!)
+                ball!.removeFromSuperview()
+                installSquareBall(Constant.BallSize, center: tapLocation)
                 animator.updateItemUsingCurrentState(ball!)
             }
+            
+            let timer = RCLElapsedTimer.sharedTimer
+            timer.delegate = self
+            timer.start()
         }
     }
     
-    // Caution! Don't change this function unless you're sure something is wrong with it. 
-    // It was had and tedious to get it right (assuming it's right)
-    // returns the angle in radians of a vector pointing from a "from" point
-    // to a "target" point
+    // Caution! Don't change this function unless you're sure something is wrong with it
+    // It was hard and tedious to get it working
+    // returns angle in radians of a vector from "from" point to "target" point
+    // zero angle points toward right. positive angle is clockwise from zero
     func angleToward(target: CGPoint, from: CGPoint) -> CGFloat {
         
         if from.y == target.y && from.x > target.x { return CGFloat(M_PI) }

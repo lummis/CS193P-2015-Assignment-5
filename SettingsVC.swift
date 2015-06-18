@@ -20,12 +20,13 @@ class SettingsVC: UIViewController {
     }
     
     var bricksVC: BricksVC!
+    var settingsTabSelected = false
     
+    // settable parameters
     var brickSize: CGSize!
     var ballPushStrength: CGFloat!
     var showGameTime: Bool!
     var brickRows: Int!
-    var settingsTabSelected = false
     
     // set false when view appears, set true if user changes a setting
     var settingsChanged = false
@@ -88,6 +89,19 @@ class SettingsVC: UIViewController {
             break
         }
         settingsChanged = true
+    }
+    
+    // called from BricksVC when it sees that user defaults contains saved data
+    func updateFromUserDefaults() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        let width = defaults.floatForKey("brickWidth")
+        if width != 0 {
+            let height = defaults.floatForKey("brickHeight")
+            brickSize = CGSize(width: CGFloat(width), height: CGFloat(height))
+            showGameTime = defaults.boolForKey("showTime")
+            ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
+            brickRows = Int(defaults.integerForKey("rows"))
+        }
     }
     
 }

@@ -56,13 +56,14 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
 
     func addBottomRegion(gameView: UIView) {
         bottomRegion?.removeFromSuperview()
-        let bottomRegionHeight = 0.75 * bricksVC!.brickSize.width
-        bottomRegion = UIView(frame: CGRectMake(0, gameView.frame.size.height
-            - bottomRegionHeight, gameView.frame.size.width, bottomRegionHeight))
+        let bottomRegionHeight = 0.55 * bricksVC!.brickSize.width
+        bottomRegionY = gameView.frame.size.height - bottomRegionHeight
+        bottomRegion = UIView(frame: CGRectMake(0, bottomRegionY!,
+            gameView.frame.size.width, bottomRegionHeight))
         bottomRegion!.backgroundColor = UIColor.lightGrayColor()
         bottomRegion!.alpha = 0.1
         gameView.addSubview(bottomRegion!)
-        bottomRegionY = gameView.frame.size.height - bottomRegionHeight
+        
         println("bottomRegionY: \(bottomRegionY)")
     }
     

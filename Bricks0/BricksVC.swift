@@ -80,23 +80,6 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     func resetGame() {
         
-        // ********** DEBUG
-        println("settingsVC: \(settingsVC)")
-        println("sum: \(settingsVC!.doSum(a:0, b:3))")
-        if let xxx = settingsVC?.brickRows {
-            println("settingsVC/brickRows: \(settingsVC!.brickRows)")
-        } else {
-            println("settingsVC.brickRows is nil")
-        }
-        println("sum: \(settingsVC!.doSum(a:1, b:3))")
-        // ********** TEST END ***
-        
-        if settingsVC?.userChangedSettings == false {
-            // we might have gotten here because user looked at the Settings tab then returned here
-            // but if the user didn't change any parameter just carry on
-            return
-        }
-        
         // stop sessionTime update. Start it again on the first tapAction
         let timer = RCLElapsedTimer.sharedTimer
         timer.delegate = self

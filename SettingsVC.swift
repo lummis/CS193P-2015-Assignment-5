@@ -14,6 +14,7 @@ struct Parameter {
     static let BrickSize2 = CGSize(width: 50, height: 25)
     static let BrickSize3 = CGSize(width: 70, height: 35)
 
+    static let NumberOfParameters = 4
     static let DefaultPushStrength = CGFloat(0.15)
     static let DefaultBrickSize = BrickSize1
     static let DefaultBrickRows = 2
@@ -21,7 +22,8 @@ struct Parameter {
 }
 
 
-class SettingsVC: UIViewController {
+class SettingsVC: UIViewController, UITableViewDelegate {
+
 
     @IBOutlet weak var brickSizeControl: UISegmentedControl!
     @IBOutlet weak var numberOfRowsStepper: UIStepper!
@@ -48,11 +50,6 @@ class SettingsVC: UIViewController {
         }
     }
     
-    // for debugging
-    func doSum(#a: Int, b: Int) -> Int {
-        return a * b
-    }
-    
     override func viewDidLoad() {
         println("SettingsVC / viewDidLoad")
         super.viewDidLoad()
@@ -69,22 +66,19 @@ class SettingsVC: UIViewController {
         showGameTimeSwitch.addTarget(self, action: "showGameTimeSwitchChanged", forControlEvents: .ValueChanged)
         
         brickSizeControl.addTarget(self, action: "setBrickSize", forControlEvents: .ValueChanged)
+        
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "TableViewSegue" {
+            println("segue callback")
+        }
     }
     
     override func viewDidAppear(animated: Bool) {
         println("SettingsVC / viewDidAppear")
         super.viewDidAppear(animated)
         userChangedSettings = false
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        println("SettingsVC / viewWillAppear")
-        super.viewWillAppear(animated)
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        println("SettingsVC / viewWillDisappear")
-        super.viewWillDisappear(animated)
     }
     
     // return 4 parameters from defaults file or from Parameter.Default...
@@ -170,24 +164,12 @@ class SettingsVC: UIViewController {
             default:
                 break
             }
-//            brickSizeControl.selectedSegmentIndex = segment
-//            
-//            showGameTimeSwitch.setOn(showGameTime, animated: false)
-//            ballPushStrengthSlider.setValue(Float(ballPushStrength), animated: false)
-//            numberOfRowsStepper.value = Double(brickRows)
     }
     
-//    // called from BricksVC on startup
-//    func updateFromUserDefaults() {
-//        let defaults = NSUserDefaults.standardUserDefaults()
-//        let width = defaults.floatForKey("brickWidth")
-//        if width != 0 {
-//            let height = defaults.floatForKey("brickHeight")
-//            brickSize = CGSize(width: CGFloat(width), height: CGFloat(height))
-//            showGameTime = defaults.boolForKey("showTime")
-//            ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
-//            brickRows = Int(defaults.integerForKey("rows"))
-//        }
+//    func tableView(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell {
+//        let cell = table.dequeueReusableCellWithIdentifier("tablecell", forIndexPath: indexPath) as! UITableViewCell
+//        cell.textLabel!.text = "hello"
+//        return cell
 //    }
     
 }

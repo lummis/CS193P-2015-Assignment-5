@@ -70,7 +70,7 @@ class SettingsVC: UIViewController, UITableViewDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "TableViewSegue" {
+        if segue.identifier == "TableEmbedSegue" {
             println("segue callback")
         }
     }

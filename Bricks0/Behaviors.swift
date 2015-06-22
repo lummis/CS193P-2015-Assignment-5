@@ -11,6 +11,11 @@ import UIKit
 class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
 
     var bricksVC: BricksVC?
+    
+    // if the ball hits a brick after the brick has entered the bottom region and changed color
+    // the brick is removed and disappears
+    // bottomRegionY is y at the top of the bottom region
+    var bottomRegionY: CGFloat?
     var bottomRegion: UIView?
     
     let gravity = UIGravityBehavior()
@@ -48,11 +53,6 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
     }
     
     var pushBehavior = UIPushBehavior(items: [], mode: UIPushBehaviorMode.Instantaneous)
-    
-    // if the ball hits a brick when the center of the brick is within the bottom region
-    // the brick is removed and disappears
-    // bottomRegionY is the y value at top of bottom region
-    var bottomRegionY: CGFloat?
 
     func addBottomRegion(gameView: UIView) {
         bottomRegion?.removeFromSuperview()
@@ -63,8 +63,6 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         bottomRegion!.backgroundColor = UIColor.lightGrayColor()
         bottomRegion!.alpha = 0.1
         gameView.addSubview(bottomRegion!)
-        
-        println("bottomRegionY: \(bottomRegionY)")
     }
     
     override init() {
@@ -151,7 +149,7 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         if theBrick.backgroundColor == Constant.BottomRegionBrickColor {
             deanimateBrick(theBrick)
             theBrick.removeFromSuperview()
-            bricksVC!.bricks = bricksVC!.bricks.filter( {$0 != theBrick} )
+            bricksVC!.bricks = bricksVC!.bricks.filter() {$0 != theBrick}
             if bricksVC!.bricks.isEmpty { bricksVC?.gameOver() }
         }
     }

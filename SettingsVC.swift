@@ -21,9 +21,7 @@ struct Parameter {
     static let DefaultShowTime = false
 }
 
-
 class SettingsVC: UIViewController, UITableViewDelegate {
-
 
     @IBOutlet weak var brickSizeControl: UISegmentedControl!
     @IBOutlet weak var numberOfRowsStepper: UIStepper!
@@ -35,6 +33,7 @@ class SettingsVC: UIViewController, UITableViewDelegate {
     }
     
     var bricksVC: BricksVC!
+    var settingsTVC: SettingsTVC?
     
     // settable parameters initialized to dummy values then reset in viewDidLoad
     var brickSize = CGSizeZero
@@ -43,10 +42,13 @@ class SettingsVC: UIViewController, UITableViewDelegate {
     var brickRows = 0
     
     // initialize to true; set false when view appears; set true when user changes a setting
-    // so false means this view appeared but the user didn't change anything
+    // so false means this view did appear but the user didn't change anything
     var userChangedSettings = true {
         didSet {
-            if userChangedSettings { persistParameters() }
+            if userChangedSettings {
+                persistParameters(brickSize: brickSize, ballPushStrength: ballPushStrength, showGameTime: showGameTime, brickRows: brickRows)
+                settingsTVC?.updateTable()
+            }
         }
     }
     
@@ -54,30 +56,33 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         println("SettingsVC / viewDidLoad")
         super.viewDidLoad()
         
-        (brickSize, ballPushStrength, showGameTime, brickRows) = getParameters()
+//        (brickSize, ballPushStrength, showGameTime, brickRows) = getParameters()
         
-        numberOfRowsStepper.value = Double(brickRows)
-        numberOfRowsStepper.addTarget(self, action: "setNumberOfRows", forControlEvents: .ValueChanged)
+//        ballPushStrengthSlider.value = Float(ballPushStrength)
+//        ballPushStrengthSlider.addTarget(self, action: "setBallPushStrength", forControlEvents: .ValueChanged)
+//        
+//        showGameTimeSwitch.on = showGameTime
+//        showGameTimeSwitch.addTarget(self, action: "showGameTimeSwitchChanged", forControlEvents: .ValueChanged)
         
-        ballPushStrengthSlider.value = Float(ballPushStrength)
-        ballPushStrengthSlider.addTarget(self, action: "setBallPushStrength", forControlEvents: .ValueChanged)
+//        brickSizeControl.addTarget(self, action: "setBrickSize", forControlEvents: .ValueChanged)
         
-        showGameTimeSwitch.on = showGameTime
-        showGameTimeSwitch.addTarget(self, action: "showGameTimeSwitchChanged", forControlEvents: .ValueChanged)
-        
-        brickSizeControl.addTarget(self, action: "setBrickSize", forControlEvents: .ValueChanged)
-        
+        setupControls(getParameters())
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+        
         if segue.identifier == "TableEmbedSegue" {
             println("segue callback")
+            settingsTVC = (segue.destinationViewController as! SettingsTVC) // parens to supress warning
+            settingsTVC!.settingsVC = self
         }
     }
     
     override func viewDidAppear(animated: Bool) {
         println("SettingsVC / viewDidAppear")
         super.viewDidAppear(animated)
+        
         userChangedSettings = false
     }
     
@@ -98,13 +103,13 @@ class SettingsVC: UIViewController, UITableViewDelegate {
             ballPushStrength = Parameter.DefaultPushStrength
             showGameTime = Parameter.DefaultShowTime
             brickRows = Parameter.DefaultBrickRows
-            persistParameters() // store into user defaults for next time
+            persistParameters(brickSize: brickSize, ballPushStrength: ballPushStrength, showGameTime: showGameTime, brickRows: brickRows) // store into user defaults for next time
         }
         
         return (brickSize, ballPushStrength, showGameTime, brickRows)
     }
             
-    func persistParameters() {
+    func persistParameters(#brickSize: CGSize, ballPushStrength: CGFloat, showGameTime: Bool, brickRows: Int) {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setFloat(Float(brickSize.width), forKey: "brickWidth")
         defaults.setFloat(Float(brickSize.height), forKey: "brickHeight")
@@ -113,18 +118,60 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         defaults.setInteger(brickRows, forKey: "rows")
     }
     
+    func setupControls(parameters: (CGSize, CGFloat, Bool, Int)) {
+        let (size, strength, showTime, nRows) = parameters
+        
+        brickSizeControl.addTarget(self, action: "setBrickSize", forControlEvents: .ValueChanged)
+        var index = -1
+        switch size {
+        case Parameter.BrickSize0:
+            index = 0
+        case Parameter.BrickSize1:
+            index = 1
+        case Parameter.BrickSize2:
+            index = 2
+        case Parameter.BrickSize3:
+            index = 3
+        default:
+            index = 4   // impossible value causes a crash
+            break
+        }
+        brickSizeControl.selectedSegmentIndex = index
+        
+        numberOfRowsStepper.addTarget(self, action: "setNumberOfRows", forControlEvents: .ValueChanged)
+        numberOfRowsStepper.value = Double(nRows)
+        
+        showGameTimeSwitch.addTarget(self, action: "showGameTimeSwitchChanged", forControlEvents: .ValueChanged)
+        showGameTimeSwitch.on = showTime
+        
+        ballPushStrengthSlider.addTarget(self, action: "setBallPushStrength", forControlEvents: .ValueChanged)
+        ballPushStrengthSlider.value = Float(strength)
+    }
+    
     func setNumberOfRows() {
         brickRows = Int(numberOfRowsStepper.value)
+        persistParameters(brickSize: brickSize,
+            ballPushStrength: ballPushStrength,
+            showGameTime: showGameTime,
+            brickRows: brickRows)
         userChangedSettings = true
     }
     
     func setBallPushStrength() {
         ballPushStrength = CGFloat(ballPushStrengthSlider.value)
+        persistParameters(brickSize: brickSize,
+            ballPushStrength: ballPushStrength,
+            showGameTime: showGameTime,
+            brickRows: brickRows)
         userChangedSettings = true
     }
     
     func showGameTimeSwitchChanged() {
         showGameTime = showGameTimeSwitch.on
+        persistParameters(brickSize: brickSize,
+            ballPushStrength: ballPushStrength,
+            showGameTime: showGameTime,
+            brickRows: brickRows)
         userChangedSettings = true
     }
     
@@ -141,6 +188,10 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         default:
             break
         }
+        persistParameters(brickSize: brickSize,
+            ballPushStrength: ballPushStrength,
+            showGameTime: showGameTime,
+            brickRows: brickRows)
         userChangedSettings = true
     }
     
@@ -165,11 +216,4 @@ class SettingsVC: UIViewController, UITableViewDelegate {
                 break
             }
     }
-    
-//    func tableView(tableView: UITableView, indexPath: NSIndexPath) -> UITableViewCell {
-//        let cell = table.dequeueReusableCellWithIdentifier("tablecell", forIndexPath: indexPath) as! UITableViewCell
-//        cell.textLabel!.text = "hello"
-//        return cell
-//    }
-    
 }

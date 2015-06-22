@@ -51,10 +51,10 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     // MARK: - RCLElapsedTimerDelegate property
     var sessionTime: Float = 0 {
-        didSet {
+        didSet {    // do these update tasks every clock tick
             updateGameTimeLabel(sessionTime)
             removeLostBricks()
-            updateBricksInBottomRegion()
+            changeColorOfBricksInBottomRegion()
         }
     }
     
@@ -115,19 +115,25 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     }
     
     func removeLostBricks() {
+        var lostBricks: [Brick] = []
+        
+        // add bricks that are outisde of gameView to lostBricks
         for brick in bricks {
-            if !gameView.pointInside(brick.center, withEvent: nil) {
-                behaviors.detachBrick(brick)
-                behaviors.deanimateBrick(brick)
-                brick.removeFromSuperview()
-                println("A lost brick was removed. Number of remaining bricks: \(bricks.count).")
-                bricks = bricks.filter( {$0 != brick} )
-                if bricks.isEmpty { gameOver() }
-            }
+            if !gameView.pointInside(brick.center, withEvent: nil) { lostBricks.append(brick) }
+        }
+        
+        // throw lost bricks away
+        for brick in lostBricks {
+            behaviors.detachBrick(brick)
+            behaviors.deanimateBrick(brick)
+            brick.removeFromSuperview()
+            bricks = bricks.filter() {$0 != brick}
+            println("A lost brick was removed")
+            if bricks.isEmpty { gameOver() }
         }
     }
     
-    func updateBricksInBottomRegion() {
+    func changeColorOfBricksInBottomRegion() {
         for brick in bricks {
             if brick.center.y > behaviors.bottomRegionY {
                 brick.backgroundColor = Constant.BottomRegionBrickColor
@@ -237,9 +243,12 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     }
     
     func gameOver() {
-        let alertView = UIAlertView.init(title: "Game Over", message: "Tap Reset to play again", delegate: self, cancelButtonTitle: "Exit")
-        let resetIndex = alertView.addButtonWithTitle("Reset")
-        alertView.delegate = self
+        let alertView = UIAlertView.init(title: "Game Over",
+            message: "Tap Reset to play again",
+            delegate: self,
+            cancelButtonTitle: "Exit")
+        alertView.addButtonWithTitle("Reset")
+//        alertView.delegate = self
         alertView.show()
     }
     

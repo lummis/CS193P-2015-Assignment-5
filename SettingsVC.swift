@@ -46,8 +46,9 @@ class SettingsVC: UIViewController, UITableViewDelegate {
     var userChangedSettings = true {
         didSet {
             if userChangedSettings {
-                persistParameters(brickSize: brickSize, ballPushStrength: ballPushStrength, showGameTime: showGameTime, brickRows: brickRows)
-                settingsTVC?.updateTable()
+                println("userChangedSettings: " + (userChangedSettings ? "true" : "false"))
+                persistParameters()
+//                settingsTVC?.updateTable()
             }
         }
     }
@@ -56,17 +57,15 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         println("SettingsVC / viewDidLoad")
         super.viewDidLoad()
         
-//        (brickSize, ballPushStrength, showGameTime, brickRows) = getParameters()
-        
-//        ballPushStrengthSlider.value = Float(ballPushStrength)
-//        ballPushStrengthSlider.addTarget(self, action: "setBallPushStrength", forControlEvents: .ValueChanged)
-//        
-//        showGameTimeSwitch.on = showGameTime
-//        showGameTimeSwitch.addTarget(self, action: "showGameTimeSwitchChanged", forControlEvents: .ValueChanged)
-        
-//        brickSizeControl.addTarget(self, action: "setBrickSize", forControlEvents: .ValueChanged)
-        
         setupControls(getParameters())
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        println("SettingsVC / viewDidAppear")
+        super.viewDidAppear(animated)
+        
+        RCLElapsedTimer.sharedTimer.pause()
+        userChangedSettings = false
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -79,17 +78,11 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
-        println("SettingsVC / viewDidAppear")
-        super.viewDidAppear(animated)
-        
-        userChangedSettings = false
-    }
-    
     // return 4 parameters from defaults file or from Parameter.Default...
     func getParameters() -> (brickSize: CGSize, ballPushStrength: CGFloat, showGameTime: Bool, brickRows: Int) {
         let defaults = NSUserDefaults.standardUserDefaults()
         let width = defaults.floatForKey("brickWidth")
+        
         // if width is not 0 then user defaults contains valid data
         if width != 0 {
             let height = defaults.floatForKey("brickHeight")
@@ -98,17 +91,26 @@ class SettingsVC: UIViewController, UITableViewDelegate {
             ballPushStrength = CGFloat(defaults.floatForKey("pushStrength"))
             brickRows = Int(defaults.integerForKey("rows"))
             
-        } else {    // on first run user defaults is empty so use Default... values
+        // on first run user defaults is empty so use Default... values
+        } else {
             brickSize = Parameter.DefaultBrickSize
             ballPushStrength = Parameter.DefaultPushStrength
             showGameTime = Parameter.DefaultShowTime
             brickRows = Parameter.DefaultBrickRows
-            persistParameters(brickSize: brickSize, ballPushStrength: ballPushStrength, showGameTime: showGameTime, brickRows: brickRows) // store into user defaults for next time
+            persistParameters()
         }
         
         return (brickSize, ballPushStrength, showGameTime, brickRows)
     }
-            
+    
+    // convenience func name
+    func persistParameters() {
+        persistParameters(brickSize: brickSize,
+            ballPushStrength: ballPushStrength,
+            showGameTime: showGameTime,
+            brickRows: brickRows)
+    }
+    
     func persistParameters(#brickSize: CGSize, ballPushStrength: CGFloat, showGameTime: Bool, brickRows: Int) {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setFloat(Float(brickSize.width), forKey: "brickWidth")
@@ -133,7 +135,7 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         case Parameter.BrickSize3:
             index = 3
         default:
-            index = 4   // impossible value causes a crash
+            index = -1   // impossible value to cause a crash
             break
         }
         brickSizeControl.selectedSegmentIndex = index
@@ -146,33 +148,6 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         
         ballPushStrengthSlider.addTarget(self, action: "setBallPushStrength", forControlEvents: .ValueChanged)
         ballPushStrengthSlider.value = Float(strength)
-    }
-    
-    func setNumberOfRows() {
-        brickRows = Int(numberOfRowsStepper.value)
-        persistParameters(brickSize: brickSize,
-            ballPushStrength: ballPushStrength,
-            showGameTime: showGameTime,
-            brickRows: brickRows)
-        userChangedSettings = true
-    }
-    
-    func setBallPushStrength() {
-        ballPushStrength = CGFloat(ballPushStrengthSlider.value)
-        persistParameters(brickSize: brickSize,
-            ballPushStrength: ballPushStrength,
-            showGameTime: showGameTime,
-            brickRows: brickRows)
-        userChangedSettings = true
-    }
-    
-    func showGameTimeSwitchChanged() {
-        showGameTime = showGameTimeSwitch.on
-        persistParameters(brickSize: brickSize,
-            ballPushStrength: ballPushStrength,
-            showGameTime: showGameTime,
-            brickRows: brickRows)
-        userChangedSettings = true
     }
     
     func setBrickSize() {
@@ -188,32 +163,25 @@ class SettingsVC: UIViewController, UITableViewDelegate {
         default:
             break
         }
-        persistParameters(brickSize: brickSize,
-            ballPushStrength: ballPushStrength,
-            showGameTime: showGameTime,
-            brickRows: brickRows)
+        persistParameters()
         userChangedSettings = true
     }
     
-    func updateParameters(#brickSize: CGSize, showGameTime: Bool,
-        ballPushStrength: CGFloat, brickRows: Int) {
-            self.brickSize = brickSize
-            self.showGameTime = showGameTime
-            self.ballPushStrength = ballPushStrength
-            self.brickRows = brickRows
-            
-            var segment = 0
-            switch brickSize {
-            case Parameter.BrickSize0:
-                segment = 0
-            case Parameter.BrickSize1:
-                segment = 1
-            case Parameter.BrickSize2:
-                segment = 2
-            case Parameter.BrickSize3:
-                segment = 3
-            default:
-                break
-            }
+    func setNumberOfRows() {
+        brickRows = Int(numberOfRowsStepper.value)
+        persistParameters()
+        userChangedSettings = true
+    }
+    
+    func showGameTimeSwitchChanged() {
+        showGameTime = showGameTimeSwitch.on
+        persistParameters()
+//        userChangedSettings = true
+    }
+    
+    func setBallPushStrength() {
+        ballPushStrength = CGFloat(ballPushStrengthSlider.value)
+        persistParameters()
+        userChangedSettings = true
     }
 }

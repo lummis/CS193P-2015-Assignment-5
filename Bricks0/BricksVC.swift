@@ -73,8 +73,8 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     
     override func viewDidAppear(animated: Bool) {
         println("BricksVC / viewDidAppear")
-        
         super.viewDidAppear(animated)
+        
         resetGame()
     }
     
@@ -83,11 +83,11 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         // stop sessionTime update. Start it again on the first tapAction
         let timer = RCLElapsedTimer.sharedTimer
         timer.delegate = self
+        if settingsVC!.userChangedSettings == false { return }
+        
         timer.stop()
         sessionTime = 0
-    
         gameTimeLabel.hidden = !showGameTime
-
         updateGameTimeLabel(sessionTime)
         
         while !bricks.isEmpty {
@@ -122,7 +122,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             if !gameView.pointInside(brick.center, withEvent: nil) { lostBricks.append(brick) }
         }
         
-        // throw lost bricks away
+        // throw away bricks in lostBricks, if any
         for brick in lostBricks {
             behaviors.detachBrick(brick)
             behaviors.deanimateBrick(brick)
@@ -214,21 +214,24 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
             }
             
             let timer = RCLElapsedTimer.sharedTimer
-            timer.delegate = self
-            timer.start()
+            if timer.timerState == .Paused {
+                timer.resume()
+            } else {
+                timer.start()
+            }
         }
     }
     
     // Caution! Don't change this function unless you're sure something is wrong with it
     // It was hard and tedious to get it working
     // returns angle in radians of a vector from "from" point to "target" point
-    // zero angle points toward right. positive angle is clockwise from zero
+    // zero angle points toward right, and positive angle is clockwise from zero
     func angleToward(target: CGPoint, from: CGPoint) -> CGFloat {
         
         if from.y == target.y && from.x > target.x { return CGFloat(M_PI) }
         if from.y == target.y && from.x < target.x { return CGFloat(0) }
-        if from.x == target.x && from.y > target.y { return CGFloat(M_PI_2) }
-        if from.x == target.x && from.y < target.y { return -CGFloat(M_PI_2) }
+        if from.x == target.x && from.y > target.y { return -CGFloat(M_PI_2) }
+        if from.x == target.x && from.y < target.y { return CGFloat(M_PI_2) }
         
         if (from.y > target.y) && (from.x > target.x) {
             return  atan( (target.y - from.y) / (target.x - from.x) ) - CGFloat(M_PI)
@@ -239,16 +242,17 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         } else if from.x < target.x {
             return atan( (target.y - from.y) / (target.x - from.x) )
             
-        } else { println("should never get here"); return 0 }
+        } else { println("angleToward(...): should never get here"); exit(0) }
     }
     
     func gameOver() {
-        let alertView = UIAlertView.init(title: "Game Over",
+        RCLElapsedTimer.sharedTimer.stop()
+        let timeString = String(format: "%3d", Int(sessionTime))
+        let alertView = UIAlertView.init(title: "Game Over. Time: " + timeString,
             message: "Tap Reset to play again",
             delegate: self,
             cancelButtonTitle: "Exit")
         alertView.addButtonWithTitle("Reset")
-//        alertView.delegate = self
         alertView.show()
     }
     

@@ -17,7 +17,7 @@ class RCLElapsedTimer: NSObject {
     
     static let sharedTimer = RCLElapsedTimer()  // singleton
     
-    private enum State {
+    enum State {
         case NotStarted
         case Running
         case Paused
@@ -31,7 +31,7 @@ class RCLElapsedTimer: NSObject {
     }
     var resolution: NSTimeInterval
     var delegate: RCLElapsedTimerDelegate!
-    private var timerState: State
+    var timerState: State
     private var timer: NSTimer!
     private var timeWhenPaused: Float
 

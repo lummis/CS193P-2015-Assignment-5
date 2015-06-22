@@ -42,7 +42,7 @@ class SettingsTVC: UITableViewController {
         // parens are needed because the ternary operator has lower priority than addition
         showTimeL.text = spaces + (settingsVC!.showGameTime ? "YES" : "NO")
         let pushStrengthMultiplier = CGFloat(200)  // to put the displayed value in the range 20 to 100 for convenience
-        pushStrengthL.text = spaces + String(format: "%4.2f", pushStrengthMultiplier * settingsVC!.ballPushStrength)
+        pushStrengthL.text = spaces + String(format: "%3.0f", pushStrengthMultiplier * settingsVC!.ballPushStrength)
     }
 
 }

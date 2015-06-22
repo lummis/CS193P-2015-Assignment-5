@@ -17,6 +17,12 @@ import UIKit
     static let BottomRegionBrickColor = UIColor.orangeColor()
 }
 
+class Brick: UIView {
+    var attachmentBehavior: UIAttachmentBehavior?
+    var collisionBehavior: UICollisionBehavior?
+    var anchor: CGPoint = CGPointZero
+}
+
 class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate, RCLElapsedTimerDelegate
 {
 

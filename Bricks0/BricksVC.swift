@@ -229,7 +229,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     func angleToward(target: CGPoint, from: CGPoint) -> CGFloat {
         
         if from.y == target.y && from.x > target.x { return CGFloat(M_PI) }
-        if from.y == target.y && from.x < target.x { return CGFloat(0) }
+        if from.y == target.y && from.x <= target.x { return CGFloat(0) }
         if from.x == target.x && from.y > target.y { return -CGFloat(M_PI_2) }
         if from.x == target.x && from.y < target.y { return CGFloat(M_PI_2) }
         

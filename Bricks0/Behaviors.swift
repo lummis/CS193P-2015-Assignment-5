@@ -81,10 +81,10 @@ class Behaviors: UIDynamicBehavior, UICollisionBehaviorDelegate {
         pushBehavior.active = true
     }
     
-    func addBarrier(path: UIBezierPath, named name: String) {
-        boundaryCollisionBehavior.removeBoundaryWithIdentifier(name)
-        boundaryCollisionBehavior.addBoundaryWithIdentifier(name, forPath: path)
-    }
+//    func addBarrier(path: UIBezierPath, named name: String) {
+//        boundaryCollisionBehavior.removeBoundaryWithIdentifier(name)
+//        boundaryCollisionBehavior.addBoundaryWithIdentifier(name, forPath: path)
+//    }
     
     func animateBrick(brick: Brick, ball: UIView) {
         gravity.addItem(brick)

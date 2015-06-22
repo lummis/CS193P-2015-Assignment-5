@@ -10,6 +10,7 @@ import UIKit
 
 class SettingsTVC: UITableViewController {
     
+    
     @IBOutlet weak var brickSizeL: UILabel!
     @IBOutlet weak var nRowsL: UILabel!
     @IBOutlet weak var showTimeL: UILabel!

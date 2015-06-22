@@ -48,7 +48,7 @@ class SettingsVC: UIViewController, UITableViewDelegate {
             if userChangedSettings {
                 println("userChangedSettings: " + (userChangedSettings ? "true" : "false"))
                 persistParameters()
-//                settingsTVC?.updateTable()
+                settingsTVC?.updateTable()
             }
         }
     }
@@ -176,7 +176,7 @@ class SettingsVC: UIViewController, UITableViewDelegate {
     func showGameTimeSwitchChanged() {
         showGameTime = showGameTimeSwitch.on
         persistParameters()
-//        userChangedSettings = true
+        userChangedSettings = true
     }
     
     func setBallPushStrength() {

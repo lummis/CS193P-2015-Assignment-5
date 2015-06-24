@@ -35,13 +35,13 @@
 		7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCLElapsedTimer.swift; sourceTree = "<group>"; };
 		7D60BD1A1B31141D00C25178 /* ToDo & Notes */ = {isa = PBXFileReference; lastKnownFileType = text; name = "ToDo & Notes"; path = "Bricks0/ToDo & Notes"; sourceTree = "<group>"; };
 		7D6E930C1B253B2D002BE1EA /* Behaviors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Behaviors.swift; sourceTree = "<group>"; };
-		7D79C1DE1B213ACA0022C7B4 /* Bricks0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bricks0.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D79C1DE1B213ACA0022C7B4 /* Bricks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bricks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D79C1E21B213ACA0022C7B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D79C1E81B213ACA0022C7B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7D79C1EA1B213ACA0022C7B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		7D79C1ED1B213ACA0022C7B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		7D79C1F31B213ACA0022C7B4 /* Bricks0Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Bricks0Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D79C1F31B213ACA0022C7B4 /* BricksTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BricksTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D79C1F81B213ACA0022C7B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D79C1F91B213ACA0022C7B4 /* Bricks0Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bricks0Tests.swift; sourceTree = "<group>"; };
 		7D79C2031B213B400022C7B4 /* BricksVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BricksVC.swift; sourceTree = "<group>"; };
@@ -72,8 +72,8 @@
 			isa = PBXGroup;
 			children = (
 				7D60BD1A1B31141D00C25178 /* ToDo & Notes */,
-				7D79C1E01B213ACA0022C7B4 /* Bricks0 */,
-				7D79C1F61B213ACA0022C7B4 /* Bricks0Tests */,
+				7D79C1E01B213ACA0022C7B4 /* Bricks */,
+				7D79C1F61B213ACA0022C7B4 /* BricksTests */,
 				7D79C1DF1B213ACA0022C7B4 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -81,13 +81,13 @@
 		7D79C1DF1B213ACA0022C7B4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7D79C1DE1B213ACA0022C7B4 /* Bricks0.app */,
-				7D79C1F31B213ACA0022C7B4 /* Bricks0Tests.xctest */,
+				7D79C1DE1B213ACA0022C7B4 /* Bricks.app */,
+				7D79C1F31B213ACA0022C7B4 /* BricksTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		7D79C1E01B213ACA0022C7B4 /* Bricks0 */ = {
+		7D79C1E01B213ACA0022C7B4 /* Bricks */ = {
 			isa = PBXGroup;
 			children = (
 				7D79C1E71B213ACA0022C7B4 /* Main.storyboard */,
@@ -99,6 +99,7 @@
 				7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */,
 				7D79C1E11B213ACA0022C7B4 /* Supporting Files */,
 			);
+			name = Bricks;
 			path = Bricks0;
 			sourceTree = "<group>";
 		};
@@ -113,12 +114,13 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		7D79C1F61B213ACA0022C7B4 /* Bricks0Tests */ = {
+		7D79C1F61B213ACA0022C7B4 /* BricksTests */ = {
 			isa = PBXGroup;
 			children = (
 				7D79C1F91B213ACA0022C7B4 /* Bricks0Tests.swift */,
 				7D79C1F71B213ACA0022C7B4 /* Supporting Files */,
 			);
+			name = BricksTests;
 			path = Bricks0Tests;
 			sourceTree = "<group>";
 		};
@@ -133,9 +135,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7D79C1DD1B213ACA0022C7B4 /* Bricks0 */ = {
+		7D79C1DD1B213ACA0022C7B4 /* Bricks */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D79C1FD1B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks0" */;
+			buildConfigurationList = 7D79C1FD1B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks" */;
 			buildPhases = (
 				7D79C1DA1B213ACA0022C7B4 /* Sources */,
 				7D79C1DB1B213ACA0022C7B4 /* Frameworks */,
@@ -145,14 +147,14 @@
 			);
 			dependencies = (
 			);
-			name = Bricks0;
+			name = Bricks;
 			productName = Bricks0;
-			productReference = 7D79C1DE1B213ACA0022C7B4 /* Bricks0.app */;
+			productReference = 7D79C1DE1B213ACA0022C7B4 /* Bricks.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7D79C1F21B213ACA0022C7B4 /* Bricks0Tests */ = {
+		7D79C1F21B213ACA0022C7B4 /* BricksTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7D79C2001B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks0Tests" */;
+			buildConfigurationList = 7D79C2001B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "BricksTests" */;
 			buildPhases = (
 				7D79C1EF1B213ACA0022C7B4 /* Sources */,
 				7D79C1F01B213ACA0022C7B4 /* Frameworks */,
@@ -163,9 +165,9 @@
 			dependencies = (
 				7D79C1F51B213ACA0022C7B4 /* PBXTargetDependency */,
 			);
-			name = Bricks0Tests;
+			name = BricksTests;
 			productName = Bricks0Tests;
-			productReference = 7D79C1F31B213ACA0022C7B4 /* Bricks0Tests.xctest */;
+			productReference = 7D79C1F31B213ACA0022C7B4 /* BricksTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +188,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7D79C1D91B213ACA0022C7B4 /* Build configuration list for PBXProject "Bricks0" */;
+			buildConfigurationList = 7D79C1D91B213ACA0022C7B4 /* Build configuration list for PBXProject "Bricks" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -199,8 +201,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7D79C1DD1B213ACA0022C7B4 /* Bricks0 */,
-				7D79C1F21B213ACA0022C7B4 /* Bricks0Tests */,
+				7D79C1DD1B213ACA0022C7B4 /* Bricks */,
+				7D79C1F21B213ACA0022C7B4 /* BricksTests */,
 			);
 		};
 /* End PBXProject section */
@@ -254,7 +256,7 @@
 /* Begin PBXTargetDependency section */
 		7D79C1F51B213ACA0022C7B4 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 7D79C1DD1B213ACA0022C7B4 /* Bricks0 */;
+			target = 7D79C1DD1B213ACA0022C7B4 /* Bricks */;
 			targetProxy = 7D79C1F41B213ACA0022C7B4 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -368,7 +370,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Bricks0/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bricks;
 			};
 			name = Debug;
 		};
@@ -378,7 +380,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Bricks0/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Bricks;
 			};
 			name = Release;
 		};
@@ -396,8 +398,8 @@
 				);
 				INFOPLIST_FILE = Bricks0Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bricks0.app/Bricks0";
+				PRODUCT_NAME = BricksTests;
+				TEST_HOST = "";
 			};
 			name = Debug;
 		};
@@ -411,15 +413,15 @@
 				);
 				INFOPLIST_FILE = Bricks0Tests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bricks0.app/Bricks0";
+				PRODUCT_NAME = BricksTests;
+				TEST_HOST = "";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7D79C1D91B213ACA0022C7B4 /* Build configuration list for PBXProject "Bricks0" */ = {
+		7D79C1D91B213ACA0022C7B4 /* Build configuration list for PBXProject "Bricks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D79C1FB1B213ACA0022C7B4 /* Debug */,
@@ -428,7 +430,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D79C1FD1B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks0" */ = {
+		7D79C1FD1B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D79C1FE1B213ACA0022C7B4 /* Debug */,
@@ -437,7 +439,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7D79C2001B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "Bricks0Tests" */ = {
+		7D79C2001B213ACA0022C7B4 /* Build configuration list for PBXNativeTarget "BricksTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7D79C2011B213ACA0022C7B4 /* Debug */,

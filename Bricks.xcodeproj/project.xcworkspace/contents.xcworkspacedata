@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Bricks0.xcodeproj">
+      location = "self:/Users/rcl/Developer/Swift learning/CS193P 2015/Bricks0/Bricks.xcodeproj">
    </FileRef>
 </Workspace>

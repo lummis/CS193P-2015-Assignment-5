@@ -212,7 +212,7 @@
             <objects>
                 <tabBarController id="L7Q-f4-xY1" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="TsY-ks-BgJ">
+                    <tabBar key="tabBar" contentMode="scaleToFill" itemPositioning="fill" id="TsY-ks-BgJ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

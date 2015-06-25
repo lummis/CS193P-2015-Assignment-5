@@ -84,6 +84,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         resetGame()
     }
     
+    // MARK: - Game Logic
     func resetGame() {
         
         // stop sessionTime update. Start it again on the first tapAction

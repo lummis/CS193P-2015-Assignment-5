@@ -15,7 +15,6 @@
 		7D79C1EE1B213ACA0022C7B4 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D79C1EC1B213ACA0022C7B4 /* LaunchScreen.xib */; };
 		7D79C1FA1B213ACA0022C7B4 /* Bricks0Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C1F91B213ACA0022C7B4 /* Bricks0Tests.swift */; };
 		7D79C2041B213B400022C7B4 /* BricksVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C2031B213B400022C7B4 /* BricksVC.swift */; };
-		7DA9BD9C1B2376CF00ECC595 /* BezierPathsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */; };
 		7DBD1A471B34A46F00537585 /* ToDo & Notes in Resources */ = {isa = PBXBuildFile; fileRef = 7D60BD1A1B31141D00C25178 /* ToDo & Notes */; };
 		7DCF8AD11B35DCF40067C83D /* SettingsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCF8AD01B35DCF40067C83D /* SettingsTVC.swift */; };
 		7DD5F3061B2A835C0081FBB1 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DD5F3051B2A835C0081FBB1 /* SettingsVC.swift */; };
@@ -45,7 +44,6 @@
 		7D79C1F81B213ACA0022C7B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D79C1F91B213ACA0022C7B4 /* Bricks0Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bricks0Tests.swift; sourceTree = "<group>"; };
 		7D79C2031B213B400022C7B4 /* BricksVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BricksVC.swift; sourceTree = "<group>"; };
-		7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BezierPathsView.swift; path = ../BezierPathsView.swift; sourceTree = "<group>"; };
 		7DCF8AD01B35DCF40067C83D /* SettingsTVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsTVC.swift; sourceTree = "<group>"; };
 		7DD5F3051B2A835C0081FBB1 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SettingsVC.swift; path = ../SettingsVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,7 +94,6 @@
 				7D79C2031B213B400022C7B4 /* BricksVC.swift */,
 				7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */,
 				7D6E930C1B253B2D002BE1EA /* Behaviors.swift */,
-				7DA9BD9B1B2376CF00ECC595 /* BezierPathsView.swift */,
 				7D79C1E11B213ACA0022C7B4 /* Supporting Files */,
 			);
 			name = Bricks;
@@ -235,7 +232,6 @@
 			files = (
 				7DD5F3061B2A835C0081FBB1 /* SettingsVC.swift in Sources */,
 				7DCF8AD11B35DCF40067C83D /* SettingsTVC.swift in Sources */,
-				7DA9BD9C1B2376CF00ECC595 /* BezierPathsView.swift in Sources */,
 				7D79C2041B213B400022C7B4 /* BricksVC.swift in Sources */,
 				7D79C1E41B213ACA0022C7B4 /* AppDelegate.swift in Sources */,
 				7D6E930D1B253B2D002BE1EA /* Behaviors.swift in Sources */,

@@ -24,8 +24,8 @@ class BezierPathsView: UIView
             let fillColor: [CGFloat] = [1.0, 0.0, 0.0, 1.0]
             CGContextSetStrokeColor(c, strokeColor)
             CGContextSetFillColor(c, fillColor)
+            path.fill()     // fill before stroke
             path.stroke()
-            path.fill()
             
         }
     }

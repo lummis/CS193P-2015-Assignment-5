@@ -9,7 +9,7 @@
         <!--Play-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="BricksVC" customModule="Bricks0" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="BricksVC" customModule="Bricks" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="wpb-MP-Q4m" userLabel="gameView" customClass="BezierPathsView" customModule="Bricks0" customModuleProvider="target">
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" translatesAutoresizingMaskIntoConstraints="NO" id="wpb-MP-Q4m" userLabel="gameView" customClass="BezierPathsView" customModule="Bricks" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="73" width="600" height="483"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="GameTime" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bAL-qE-I1q">
@@ -72,7 +72,7 @@
         <!--Settings-->
         <scene sceneID="unr-pW-niZ">
             <objects>
-                <viewController id="don-te-3V0" customClass="SettingsVC" customModule="Bricks0" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="don-te-3V0" customClass="SettingsVC" customModule="Bricks" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Jbx-pS-H0H"/>
                         <viewControllerLayoutGuide type="bottom" id="j8N-c4-Fga"/>
@@ -229,7 +229,7 @@
         <!--SettingsTVC-->
         <scene sceneID="4bC-Cn-L8y">
             <objects>
-                <tableViewController id="RiI-Aa-1aa" customClass="SettingsTVC" customModule="Bricks0" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="RiI-Aa-1aa" customClass="SettingsTVC" customModule="Bricks" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="Qbz-CZ-908">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="268"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

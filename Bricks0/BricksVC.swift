@@ -26,7 +26,7 @@ class Brick: UIView {
 class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehaviorDelegate, UIAlertViewDelegate, RCLElapsedTimerDelegate
 {
 
-    @IBOutlet weak var gameView: UIView!
+    @IBOutlet weak var gameView: BezierPathsView!
     @IBOutlet weak var gameTimeLabel: UILabel!
  
     // the animator will be created the first time it is referenced
@@ -113,6 +113,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
         animator.addBehavior(behaviors)
         // following stmt must be before installBricks so ball pre-exists bricks
         installSquareBall(Constant.BallSize, center: Constant.InitialBallPosition)
+//        installOvalBall(Constant.BallSize, center: Constant.InitialBallPosition)
         installBricks()
     }
 
@@ -184,15 +185,16 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
     }
     
     // not tested or debugged
-//    func installOvalBall (size: CGSize, center: CGPoint) {
-//        let path = UIBezierPath()
-//        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(0), endAngle:CGFloat(M_PI), clockwise: true)
-//        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(M_PI), endAngle:CGFloat(0), clockwise:true)
-//        path.closePath()
-//        path.lineWidth = 15
-//        gameView.setPath(path, named: "BallPath")
+    func installOvalBall (size: CGSize, center: CGPoint) {
+        let path = UIBezierPath()
+        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(0), endAngle:CGFloat(M_PI), clockwise: true)
+        path.addArcWithCenter(center, radius:size.width / 2, startAngle:CGFloat(M_PI), endAngle:CGFloat(0), clockwise:true)
+        path.closePath()
+        path.lineWidth = 5
+        gameView.setPath(path, named: "BallPath")
 //        behaviors.addBarrier(path, named: "Ball")
-//    }
+//        behaviors.animateBall(path)
+    }
     
     func installSquareBall (ballSize: CGSize, center: CGPoint) {
         let frame = CGRect(origin: Constant.InitialBallPosition, size: ballSize)
@@ -216,6 +218,7 @@ class BricksVC: UIViewController, UIDynamicAnimatorDelegate, UICollisionBehavior
                 behaviors.deanimateBall(ball!)
                 ball!.removeFromSuperview()
                 installSquareBall(Constant.BallSize, center: tapLocation)
+//                installOvalBall(Constant.BallSize, center: tapLocation)
                 animator.updateItemUsingCurrentState(ball!)
             }
             

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7D484B8B1B3E0FC0009E125E /* README in Resources */ = {isa = PBXBuildFile; fileRef = 7D484B8A1B3E0FC0009E125E /* README */; };
 		7D60BD191B30946C00C25178 /* RCLElapsedTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */; };
 		7D6E930D1B253B2D002BE1EA /* Behaviors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D6E930C1B253B2D002BE1EA /* Behaviors.swift */; };
 		7D79C1E41B213ACA0022C7B4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79C1E31B213ACA0022C7B4 /* AppDelegate.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7D484B8A1B3E0FC0009E125E /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		7D60BD181B30946C00C25178 /* RCLElapsedTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RCLElapsedTimer.swift; sourceTree = "<group>"; };
 		7D6E930C1B253B2D002BE1EA /* Behaviors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Behaviors.swift; sourceTree = "<group>"; };
 		7D79C1DE1B213ACA0022C7B4 /* Bricks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bricks.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 		7D79C1D51B213ACA0022C7B4 = {
 			isa = PBXGroup;
 			children = (
+				7D484B8A1B3E0FC0009E125E /* README */,
 				7D79C1E01B213ACA0022C7B4 /* Bricks */,
 				7D79C1F61B213ACA0022C7B4 /* BricksTests */,
 				7D79C1DF1B213ACA0022C7B4 /* Products */,
@@ -206,6 +209,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D484B8B1B3E0FC0009E125E /* README in Resources */,
 				7D79C1E91B213ACA0022C7B4 /* Main.storyboard in Resources */,
 				7D79C1EE1B213ACA0022C7B4 /* LaunchScreen.xib in Resources */,
 				7D79C1EB1B213ACA0022C7B4 /* Images.xcassets in Resources */,

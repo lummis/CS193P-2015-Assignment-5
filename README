@@ -1,7 +1,29 @@
-Implements Assignment 5 for the online Stanford course CS193P "Developing iOS 8 Apps with Swift".
+Implements Assignment 5 in the online Stanford course CS193P "Developing iOS 8 Apps with Swift".
 
 See https://itunes.apple.com/us/course/developing-ios-8-apps-swift/id961180099
 
-The assignment is to build a version of the old Breakout game. This version of the game is pretty
+The assignment is to build a version of the old game "Brickout". The version specified is pretty
 stupid but uses many different features of Swift and the iOS API. The point is to demonstrate your
-ability to use the language features, not to make a good game.
+ability to use the language features, not to make a good game. All of the required tasks are done
+except I don't have a paddle and therefore don't need to recognize a swipe gesture. It isn't left
+out because I couldn't do it but because I think including it would make the game even worse. After
+all task #1 includes the sentence "Creativity is encouraged and will be rewarded."
+
+All the bricks start out anchored near the top. On the first ball hit a brick changes color and may
+rotate. On the second hit it becomes unanchored and falls under the influence of gravity. If a brick
+comes to rest at the bottom (but not on top of another brick) it changes to a third color. When the
+ball hits a brick after it has the third color it (the brick) is removed. As he said, sometimes the
+ball will go out of the gameView. If that happens tap anywhere in the game view and a new ball is
+placed there. (Seems like a fundamental weakness of the dynamic animation methods.)
+
+Instead of a tap producing a push in a random direction I'm doing a push in the direction from the
+tap to the brick. In other words the player can aim the push. As "extra credit" I'm timing the
+game and showing the time at the top of the scene. I have four controls in a separate tab view.
+The game resets if the user changes any of the controls, but if the user switches to the settings
+view but doesn't change anything the game does not reset. The setting are persisted in userDefaults.
+
+I tried to find a way to make the "ball" have a shape other than rectangular but couldn't do it.
+Maybe that's not possible. (Another weakness of dynamic animation.) I would welcome anybody
+showing how to do it. I was going to give it the shape of a football. I see how to make it have
+that appearance but the collisions would still be based on the underlying retangular UIView so
+it wouldn't bounce like a football.
